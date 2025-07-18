@@ -1,0 +1,139 @@
+{
+  "match": {
+    "id": 103274,
+    "competition": {
+      "id": 2021,
+      "name": "Premier League",
+      "emblem": "https://crests.football-data.org/PL.png"
+    },
+    "utcDate": "2024-09-14T14:00:00Z",
+    "status": "SCHEDULED",
+    "venue": "Etihad Stadium",
+    "homeTeam": {
+      "id": 65,
+      "name": "Manchester City FC",
+      "shortName": "Man City",
+      "tla": "MCI",
+      "crest": "https://crests.football-data.org/65.png"
+    },
+    "awayTeam": {
+      "id": 66,
+      "name": "Manchester United FC",
+      "shortName": "Man United",
+      "tla": "MUN",
+      "crest": "https://crests.football-data.org/66.png"
+    },
+    "score": {
+      "winner": null,
+      "duration": "REGULAR",
+      "fullTime": {
+        "home": null,
+        "away": null
+      }
+    },
+    "odds": {
+      "homeWin": 1.45,
+      "draw": 4.50,
+      "awayWin": 6.50
+    }
+  },
+  "prediction_data": {
+    "head_to_head": [
+      {
+        "date": "2024-05-25",
+        "competition": "FA Cup Final",
+        "home_team": "Manchester City",
+        "away_team": "Manchester United",
+        "score": "1-2"
+      },
+      {
+        "date": "2024-03-03",
+        "competition": "Premier League",
+        "home_team": "Manchester City",
+        "away_team": "Manchester United",
+        "score": "3-1"
+      },
+      {
+        "date": "2023-10-29",
+        "competition": "Premier League",
+        "home_team": "Manchester United",
+        "away_team": "Manchester City",
+        "score": "0-3"
+      }
+    ],
+    "home_team_form": {
+      "last_five_matches": [
+        {"opponent": "Fulham", "result": "W", "score": "2-0"},
+        {"opponent": "AFC Bournemouth", "result": "W", "score": "3-1"},
+        {"opponent": "Crystal Palace", "result": "L", "score": "0-1"},
+        {"opponent": "Southampton", "result": "D", "score": "0-0"},
+        {"opponent": "Wolves", "result": "W", "score": "1-0"}
+      ],
+      "expected_goals": {
+        "for_avg_season": 2.45,
+        "against_avg_season": 0.91
+      }
+    },
+    "away_team_form": {
+      "last_five_matches": [
+        {"opponent": "Aston Villa", "result": "W", "score": "2-0"},
+        {"opponent": "Chelsea", "result": "L", "score": "0-1"},
+        {"opponent": "West Ham", "result": "L", "score": "0-2"},
+        {"opponent": "Brentford", "result": "L", "score": "3-4"},
+        {"opponent": "Bournemouth", "result": "D", "score": "1-1"}
+      ],
+      "expected_goals": {
+        "for_avg_season": 1.55,
+        "against_avg_season": 1.48
+      }
+    },
+    "player_stats": {
+      "home_team": [
+        {
+          "name": "Erling Haaland",
+          "position": "ST",
+          "fc25_rating": 91,
+          "attributes": {"pace": 90, "shooting": 94, "passing": 68, "dribbling": 81, "defending": 48, "physical": 89},
+          "last_five_ratings": [8.5, 9.2, 7.1, 6.9, 8.8]
+        },
+        {
+          "name": "Phil Foden",
+          "position": "CAM",
+          "fc25_rating": 87,
+          "attributes": {"pace": 84, "shooting": 82, "passing": 84, "dribbling": 91, "defending": 60, "physical": 65},
+          "last_five_ratings": [9.1, 8.4, 8.8, 7.9, 7.5]
+        },
+        {
+          "name": "Rodri",
+          "position": "CDM",
+          "fc25_rating": 91,
+          "attributes": {"pace": 65, "shooting": 75, "passing": 85, "dribbling": 84, "defending": 87, "physical": 86},
+          "last_five_ratings": [7.8, 8.2, 8.5, 7.6, 7.9]
+        }
+      ],
+      "away_team": [
+        {
+          "name": "Bruno Fernandes",
+          "position": "CAM",
+          "fc25_rating": 87,
+          "attributes": {"pace": 75, "shooting": 85, "passing": 90, "dribbling": 84, "defending": 65, "physical": 72},
+          "last_five_ratings": [7.5, 8.1, 6.8, 7.9, 9.0]
+        },
+        {
+          "name": "Marcus Rashford",
+          "position": "LW",
+          "fc25_rating": 84,
+          "attributes": {"pace": 90, "shooting": 83, "passing": 76, "dribbling": 85, "defending": 45, "physical": 75},
+          "last_five_ratings": [6.5, 6.2, 7.0, 7.8, 6.4]
+        },
+        {
+          "name": "Lisandro Martínez",
+          "position": "CB",
+          "fc25_rating": 85,
+          "attributes": {"pace": 72, "shooting": 55, "passing": 70, "dribbling": 71, "defending": 87, "physical": 84},
+          "last_five_ratings": [8.0, 7.2, 7.5, 8.4, 7.1]
+        }
+      ]
+    }
+  }
+}
