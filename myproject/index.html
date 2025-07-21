@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football API Dashboard</title>
+</head>
+<body>
+    <h1>Football Matches Simulation API</h1>
+    
+    <h2>Match Data</h2>
+    <label>Select Team:</label>
+    <button onclick="fetchMatchData()">Get Match Info</button>
+    <button onclick="fetchPredictions()">Get Predictions</button>
+    <button onclick="fetchHeadToHead()">Head-to-Head</button>
+    <div id="match-result"></div>
+    
+    <hr>
+    
+    <h2>Team Data</h2>
+    <label>Select Team:</label>
+    <select id="country-select" onchange="onCountryChange()">
+        <option value="">Select Country</option>
+        <option value="england">England</option>
+        <option value="spain">Spain</option>
+        <option value="germany">Germany</option>
+        <!-- Add more countries as needed -->
+    </select>
+    <select id="league-select" onchange="onLeagueChange()" disabled>
+        <option value="">Select League</option>
+        <!-- Leagues will be populated dynamically -->
+    </select>
+    <select id="team-select" disabled>
+        <option value="">Select Team</option>
+        <!-- Teams will be populated dynamically -->
+    </select>
+    
+    <!-- External JavaScript file for team selection -->
+    <script src="team-selector.js"></script>
+    
+    <br><br>
+    <button onclick="fetchTeamData()">Get Team Players</button>
+    <button onclick="fetchTeamForm()">Get Team Form</button>
+    <div id="team-result"></div>
+    
+    <hr>
+    
+    <h2>Custom API Test</h2>
+    <label>Endpoint:</label>
+    <input type="text" id="custom-endpoint" placeholder="/mock-api/match" value="/mock-api/match">
+    <br><br>
+    <button onclick="testEndpoint()">Test Endpoint</button>
+    <button onclick="clearAll()">Clear Results</button>
+    <div id="custom-result"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
