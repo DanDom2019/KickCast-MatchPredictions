@@ -1,0 +1,22 @@
+[
+    { "LeagueID": 77, "Name": "Athletic Club" },
+    { "LeagueID": 78, "Name": "Club Atlético de Madrid" },
+    { "LeagueID": 79, "Name": "CA Osasuna" },
+    { "LeagueID": 80, "Name": "RCD Espanyol de Barcelona" },
+    { "LeagueID": 81, "Name": "FC Barcelona" },
+    { "LeagueID": 82, "Name": "Getafe CF" },
+    { "LeagueID": 86, "Name": "Real Madrid CF" },
+    { "LeagueID": 87, "Name": "Rayo Vallecano de Madrid" },
+    { "LeagueID": 88, "Name": "Levante UD" },
+    { "LeagueID": 89, "Name": "RCD Mallorca" },
+    { "LeagueID": 90, "Name": "Real Betis Balompié" },
+    { "LeagueID": 92, "Name": "Real Sociedad de Fútbol" },
+    { "LeagueID": 94, "Name": "Villarreal CF" },
+    { "LeagueID": 95, "Name": "Valencia CF" },
+    { "LeagueID": 263, "Name": "Deportivo Alavés" },
+    { "LeagueID": 285, "Name": "Elche CF" },
+    { "LeagueID": 298, "Name": "Girona FC" },
+    { "LeagueID": 558, "Name": "RC Celta de Vigo" },
+    { "LeagueID": 559, "Name": "Sevilla FC" },
+    { "LeagueID": 1048, "Name": "Real Oviedo" }
+]

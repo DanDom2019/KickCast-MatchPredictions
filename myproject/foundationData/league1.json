@@ -1,0 +1,20 @@
+[
+    { "id": 511, "name": "Toulouse FC" },
+    { "id": 512, "name": "Stade Brestois 29" },
+    { "id": 516, "name": "Olympique de Marseille" },
+    { "id": 519, "name": "AJ Auxerre" },
+    { "id": 521, "name": "Lille OSC" },
+    { "id": 522, "name": "OGC Nice" },
+    { "id": 523, "name": "Olympique Lyonnais" },
+    { "id": 524, "name": "Paris Saint-Germain FC" },
+    { "id": 525, "name": "FC Lorient" },
+    { "id": 529, "name": "Stade Rennais FC 1901" },
+    { "id": 532, "name": "Angers SCO" },
+    { "id": 533, "name": "Le Havre AC" },
+    { "id": 543, "name": "FC Nantes" },
+    { "id": 545, "name": "FC Metz" },
+    { "id": 546, "name": "Racing Club de Lens" },
+    { "id": 548, "name": "AS Monaco FC" },
+    { "id": 576, "name": "RC Strasbourg Alsace" },
+    { "id": 1045, "name": "Paris FC" }
+]

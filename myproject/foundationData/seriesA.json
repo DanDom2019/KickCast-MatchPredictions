@@ -1,0 +1,22 @@
+[
+    { "LeagueID": 98, "Name": "AC Milan" },
+    { "LeagueID": 99, "Name": "ACF Fiorentina" },
+    { "LeagueID": 100, "Name": "AS Roma" },
+    { "LeagueID": 102, "Name": "Atalanta BC" },
+    { "LeagueID": 103, "Name": "Bologna FC 1909" },
+    { "LeagueID": 104, "Name": "Cagliari Calcio" },
+    { "LeagueID": 107, "Name": "Genoa CFC" },
+    { "LeagueID": 108, "Name": "FC Internazionale Milano" },
+    { "LeagueID": 109, "Name": "Juventus FC" },
+    { "LeagueID": 110, "Name": "SS Lazio" },
+    { "LeagueID": 112, "Name": "Parma Calcio 1913" },
+    { "LeagueID": 113, "Name": "SSC Napoli" },
+    { "LeagueID": 115, "Name": "Udinese Calcio" },
+    { "LeagueID": 450, "Name": "Hellas Verona FC" },
+    { "LeagueID": 457, "Name": "US Cremonese" },
+    { "LeagueID": 471, "Name": "US Sassuolo Calcio" },
+    { "LeagueID": 487, "Name": "AC Pisa 1909" },
+    { "LeagueID": 586, "Name": "Torino FC" },
+    { "LeagueID": 5890, "Name": "US Lecce" },
+    { "LeagueID": 7397, "Name": "Como 1907" }
+]

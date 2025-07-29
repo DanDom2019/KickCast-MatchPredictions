@@ -1,0 +1,20 @@
+[
+    { "id": 1, "name": "1. FC Köln" },
+    { "id": 2, "name": "TSG 1899 Hoffenheim" },
+    { "id": 3, "name": "Bayer 04 Leverkusen" },
+    { "id": 4, "name": "Borussia Dortmund" },
+    { "id": 5, "name": "FC Bayern München" },
+    { "id": 7, "name": "Hamburger SV" },
+    { "id": 10, "name": "VfB Stuttgart" },
+    { "id": 11, "name": "VfL Wolfsburg" },
+    { "id": 12, "name": "SV Werder Bremen" },
+    { "id": 15, "name": "1. FSV Mainz 05" },
+    { "id": 16, "name": "FC Augsburg" },
+    { "id": 17, "name": "SC Freiburg" },
+    { "id": 18, "name": "Borussia Mönchengladbach" },
+    { "id": 19, "name": "Eintracht Frankfurt" },
+    { "id": 20, "name": "FC St. Pauli 1910" },
+    { "id": 28, "name": "1. FC Union Berlin" },
+    { "id": 44, "name": "1. FC Heidenheim 1846" },
+    { "id": 721, "name": "RB Leipzig" }
+]

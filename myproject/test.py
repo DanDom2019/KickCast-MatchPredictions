@@ -14,9 +14,10 @@ def fetch(path, params=None):
     return resp.json()
 
 if __name__ == "__main__":
-    data = fetch("/competitions")
+
+    data = fetch(f"/competitions/{2015}/teams")
     # Summarize leagues by printing id and name
-    competitions = data.get('competitions', [])
+    teams = data.get('teams', [])
     print("League ID - Name:")
-    for comp in competitions:
-        print(f"{comp['id']} - {comp['name']}")
+    for team in teams:
+        print(f"{team['id']} - {team['name']}")

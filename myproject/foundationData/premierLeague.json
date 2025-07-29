@@ -1,0 +1,22 @@
+[
+    { "leagueId": 57, "name": "Arsenal FC" },
+    { "leagueId": 58, "name": "Aston Villa FC" },
+    { "leagueId": 61, "name": "Chelsea FC" },
+    { "leagueId": 62, "name": "Everton FC" },
+    { "leagueId": 63, "name": "Fulham FC" },
+    { "leagueId": 64, "name": "Liverpool FC" },
+    { "leagueId": 65, "name": "Manchester City FC" },
+    { "leagueId": 66, "name": "Manchester United FC" },
+    { "leagueId": 67, "name": "Newcastle United FC" },
+    { "leagueId": 71, "name": "Sunderland AFC" },
+    { "leagueId": 73, "name": "Tottenham Hotspur FC" },
+    { "leagueId": 76, "name": "Wolverhampton Wanderers FC" },
+    { "leagueId": 328, "name": "Burnley FC" },
+    { "leagueId": 341, "name": "Leeds United FC" },
+    { "leagueId": 351, "name": "Nottingham Forest FC" },
+    { "leagueId": 354, "name": "Crystal Palace FC" },
+    { "leagueId": 397, "name": "Brighton & Hove Albion FC" },
+    { "leagueId": 402, "name": "Brentford FC" },
+    { "leagueId": 563, "name": "West Ham United FC" },
+    { "leagueId": 1044, "name": "AFC Bournemouth" }
+]
