@@ -54,3 +54,58 @@ const API_BASE = 'http://127.0.0.1:5000';
             document.getElementById('team-result').innerHTML = '';
             document.getElementById('custom-result').innerHTML = '';
         }
+
+        function fetchLeagues() {
+            console.log('Fetching leagues...');
+            fetch('foundationData/leagues.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(leagues => {
+                    const leagueSelect = document.getElementById('league-select');
+                    leagueSelect.innerHTML = ''; // Clear previous items
+                    leagues.forEach(league => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.className = 'dropdown-item';
+                        a.href = '#';
+                        a.textContent = league.Name;
+                        a.dataset.leagueId = league.LeagueID;
+                        a.onclick = function() {
+                            selectLeague(league.LeagueID, league.Name);
+                            return false; // Prevent default action
+                        };
+                        li.appendChild(a);
+                        leagueSelect.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    const leagueSelect = document.getElementById('league-select');
+                    leagueSelect.innerHTML = `<option value="">Error loading leagues</option>`;
+                    leagueSelect.classList.add('is-invalid'); // Bootstrap error style
+                    console.error(error);
+                });
+        }
+        
+        function selectLeague(leagueId, leagueName) {
+            console.log(`Selected league: ${leagueName} (ID: ${leagueId})`);
+            
+            // Update the dropdown button text to show the selected league
+            const dropdownButton = document.querySelector('.dropdown-toggle');
+            if (dropdownButton) {
+                dropdownButton.textContent = leagueName;
+            }
+            
+            // Store the selected league ID for later use
+            document.querySelector('.teamSelectDropdown').dataset.selectedLeagueId = leagueId;
+            
+            // You can add more functionality here, like:
+            // 1. Fetch teams for this league
+            // 2. Update other parts of your UI
+            // 3. Trigger other actions
+            
+            // Example: fetchTeamsForLeague(leagueId);
+        }

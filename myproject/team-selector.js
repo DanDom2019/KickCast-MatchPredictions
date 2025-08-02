@@ -31,6 +31,14 @@ const teamsByLeague = {
     ]
 };
 
+//grab the data from foundationData
+function getFoundationData() {
+    return {
+        leaguesByCountry: leaguesByCountry,
+        teamsByLeague: teamsByLeague
+    };
+}
+
 function onCountryChange() {
     const country = document.getElementById('country-select').value;
     const leagueSelect = document.getElementById('league-select');
