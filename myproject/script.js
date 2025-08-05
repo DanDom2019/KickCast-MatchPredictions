@@ -102,16 +102,50 @@ const API_BASE = 'http://127.0.0.1:5000';
             // Store the selected league ID for later use
             document.querySelector('.teamSelectDropdown').dataset.selectedLeagueId = leagueId;
             
-            // You can add more functionality here, like:
-            // 1. Fetch teams for this league
-            // 2. Update other parts of your UI
-            // 3. Trigger other actions
-            // Example: fetchTeamsForLeague(leagueId)
-            fetchTeamByLeagues(leagueid, leagueName);
+            fetchTeamByLeagues(leagueId, leagueName);
         }
 
-        function fetchTeamByLeagues(leagueId, leagueName) {
+        function fetchTeamByLeagues(leagueId, _leagueName) {
+            fetch('foundationData/mainLeaguesTeams.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const teams = data.filter(team => team.LeagueID === leagueId);
+                const teamSelect = document.getElementById('team-select');
+                teamSelect.innerHTML = ''; // Clear previous items
+                teams.forEach(team => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.className = 'dropdown-item';
+                    a.href = '#';
+                    a.textContent = team.Name;
+                    a.dataset.teamId = team.TeamID;
+                    a.onclick = function() {
+                        selectTeam(team.TeamID, team.Name);
+                        return false; // Prevent default action
+                    };
+                    li.appendChild(a);
+                    teamSelect.appendChild(li);
+                });
+            })
             
-            
-            
+        }
+
+        function loadTeamsForSelectedLeague() {
+            // Get the currently selected league ID
+            const selectedLeagueId = document.querySelector('.teamSelectDropdown').dataset.selectedLeagueId;
+            const selectedLeagueName = document.querySelector('.teamSelectDropdown').dataset.selectedLeagueName;
+            if (selectedLeagueId) {
+                // If a league is selected, fetch its teams
+                fetchTeamsByLeague(selectedLeagueId, selectedLeagueName);
+            } else {
+                // If no league is selected yet, show a message or prompt user
+                alert('Please select a league first');
+                // Or alternatively, open the leagues dropdown
+                // document.getElementById('leaguesDropdownBtn').click();
+            }
         }
