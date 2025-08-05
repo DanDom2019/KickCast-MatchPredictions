@@ -18,20 +18,42 @@
     <div id="match-result"></div>
     
     <hr>
-    
     <h2>Team Data</h2>
     <div class="teamSelectDropdown">
-    <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="leaguesDropdownBtn" 
-          data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues()">
-    Load Leagues
-  </button>
-  <ul class="dropdown-menu" id="league-select" aria-labelledby="leaguesDropdownBtn">
-    <!-- Items will be populated dynamically -->
-  </ul>
-</div>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" 
+            type="button" 
+            id="leaguesDropdownBtn" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false" 
+            onclick="fetchLeagues()">
+          Load Leagues
+        </button>
+        <ul class="dropdown-menu" 
+          id="league-select" 
+          aria-labelledby="leaguesDropdownBtn">
+          <!-- Items will be populated dynamically -->
+        </ul>
+        <button class="btn btn-secondary dropdown-toggle" 
+            type="button" 
+            id="teamsDropdownBtn" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false" 
+            onclick="fetchTeamData()">
+          Load Teams
+        </button>
+        <ul class="dropdown-menu" 
+          id="team-select" 
+          aria-labelledby="teamsDropdownBtn">
+          <!-- Items will be populated dynamically -->
+        </ul>
+      </div>
+    </div>
     
- 
+
+
+
+
     
     <!-- External JavaScript file for team selection -->
     <script src="team-selector.js"></script>

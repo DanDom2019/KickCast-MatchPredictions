@@ -1,15 +1,7 @@
 [
-    { "LeagueID": 2013, "Name": "Campeonato Brasileiro Série A" },
-    { "LeagueID": 2016, "Name": "Championship" },
     { "LeagueID": 2021, "Name": "Premier League" },
-    { "LeagueID": 2001, "Name": "UEFA Champions League" },
-    { "LeagueID": 2018, "Name": "European Championship" },
     { "LeagueID": 2015, "Name": "Ligue 1" },
     { "LeagueID": 2002, "Name": "Bundesliga" },
     { "LeagueID": 2019, "Name": "Serie A" },
-    { "LeagueID": 2003, "Name": "Eredivisie" },
-    { "LeagueID": 2017, "Name": "Primeira Liga" },
-    { "LeagueID": 2152, "Name": "Copa Libertadores" },
-    { "LeagueID": 2014, "Name": "Primera Division" },
-    { "LeagueID": 2000, "Name": "FIFA World Cup" }
+    { "LeagueID": 2014, "Name": "Primera Division" }
 ]

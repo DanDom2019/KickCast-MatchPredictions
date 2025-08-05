@@ -106,6 +106,12 @@ const API_BASE = 'http://127.0.0.1:5000';
             // 1. Fetch teams for this league
             // 2. Update other parts of your UI
             // 3. Trigger other actions
+            // Example: fetchTeamsForLeague(leagueId)
+            fetchTeamByLeagues(leagueid, leagueName);
+        }
+
+        function fetchTeamByLeagues(leagueId, leagueName) {
             
-            // Example: fetchTeamsForLeague(leagueId);
+            
+            
         }
