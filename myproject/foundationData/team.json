@@ -1,0 +1,246 @@
+{
+    "area": {
+        "id": 2224,
+        "name": "Spain",
+        "code": "ESP",
+        "flag": "https://crests.football-data.org/760.svg"
+    },
+    "id": 86,
+    "name": "Real Madrid CF",
+    "shortName": "Real Madrid",
+    "tla": "RMA",
+    "crest": "https://crests.football-data.org/86.png",
+    "address": "Avenida Concha Espina, 1 Madrid 28036",
+    "website": "http://www.realmadrid.com",
+    "founded": 1902,
+    "clubColors": "White / Purple",
+    "venue": "Estadio Santiago Bernabéu",
+    "runningCompetitions": [
+        {
+            "id": 2014,
+            "name": "Primera Division",
+            "code": "PD",
+            "type": "LEAGUE",
+            "emblem": "https://crests.football-data.org/laliga.png"
+        }
+    ],
+    "coach": {
+        "id": 180279,
+        "firstName": "",
+        "lastName": "Xabi Alonso",
+        "name": "Xabi Alonso",
+        "dateOfBirth": "1981-11-25",
+        "nationality": "Spain",
+        "contract": {
+            "start": "2025-06",
+            "until": "2028-06"
+        }
+    },
+    "squad": [
+        {
+            "id": 3641,
+            "name": "Thibaut Courtois",
+            "position": "Goalkeeper",
+            "dateOfBirth": "1992-05-11",
+            "nationality": "Belgium"
+        },
+        {
+            "id": 28995,
+            "name": "Andriy Lunin",
+            "position": "Goalkeeper",
+            "dateOfBirth": "1999-02-11",
+            "nationality": "Ukraine"
+        },
+        {
+            "id": 188407,
+            "name": "Sergio Mestre",
+            "position": "Goalkeeper",
+            "dateOfBirth": "2005-02-13",
+            "nationality": "Spain"
+        },
+        {
+            "id": 213266,
+            "name": "Fran García",
+            "position": "Defence",
+            "dateOfBirth": "1999-08-14",
+            "nationality": "Spain"
+        },
+        {
+            "id": 275112,
+            "name": "Mario Rivas",
+            "position": "Defence",
+            "dateOfBirth": "2007-03-16",
+            "nationality": "Spain"
+        },
+        {
+            "id": 279092,
+            "name": "Jesús Fortea",
+            "position": "Defence",
+            "dateOfBirth": "2007-03-26",
+            "nationality": "Spain"
+        },
+        {
+            "id": 270273,
+            "name": "Chema Andrés",
+            "position": "Midfield",
+            "dateOfBirth": "2005-04-25",
+            "nationality": "Spain"
+        },
+        {
+            "id": 272712,
+            "name": "Raúl",
+            "position": "Centre-Back",
+            "dateOfBirth": "2003-02-13",
+            "nationality": "Spain"
+        },
+        {
+            "id": 217658,
+            "name": "Gonzalo García",
+            "position": "Right Winger",
+            "dateOfBirth": "2004-03-24",
+            "nationality": "Spain"
+        },
+        {
+            "id": 191727,
+            "name": "Dean Huijsen",
+            "position": "Centre-Back",
+            "dateOfBirth": "2005-04-14",
+            "nationality": "Spain"
+        },
+        {
+            "id": 188487,
+            "name": "Endrick",
+            "position": "Centre-Forward",
+            "dateOfBirth": "2006-07-21",
+            "nationality": "Brazil"
+        },
+        {
+            "id": 182020,
+            "name": "Alvaro Fernandez",
+            "position": "Left-Back",
+            "dateOfBirth": "2003-03-23",
+            "nationality": "Spain"
+        },
+        {
+            "id": 169162,
+            "name": "Arda Guler",
+            "position": "Right Winger",
+            "dateOfBirth": "2005-02-25",
+            "nationality": "Turkey"
+        },
+        {
+            "id": 125010,
+            "name": "Jude Bellingham",
+            "position": "Attacking Midfield",
+            "dateOfBirth": "2003-06-29",
+            "nationality": "England"
+        },
+        {
+            "id": 123350,
+            "name": "Reinier",
+            "position": "Attacking Midfield",
+            "dateOfBirth": "2002-01-19",
+            "nationality": "Brazil"
+        },
+        {
+            "id": 102343,
+            "name": "Eduardo Camavinga",
+            "position": "Central Midfield",
+            "dateOfBirth": "2002-11-10",
+            "nationality": "France"
+        },
+        {
+            "id": 8514,
+            "name": "Aurélien Tchouameni",
+            "position": "Defensive Midfield",
+            "dateOfBirth": "2000-01-27",
+            "nationality": "France"
+        },
+        {
+            "id": 8458,
+            "name": "Ferland Mendy",
+            "position": "Left-Back",
+            "dateOfBirth": "1995-06-08",
+            "nationality": "France"
+        },
+        {
+            "id": 7887,
+            "name": "Brahim Diaz",
+            "position": "Right Winger",
+            "dateOfBirth": "1999-08-03",
+            "nationality": "Spain"
+        },
+        {
+            "id": 7867,
+            "name": "Trent Alexander-Arnold",
+            "position": "Right-Back",
+            "dateOfBirth": "1998-10-07",
+            "nationality": "England"
+        },
+        {
+            "id": 3374,
+            "name": "Kylian Mbappé",
+            "position": "Centre-Forward",
+            "dateOfBirth": "1998-12-20",
+            "nationality": "France"
+        },
+        {
+            "id": 3194,
+            "name": "Dani Carvajal",
+            "position": "Right-Back",
+            "dateOfBirth": "1992-01-11",
+            "nationality": "Spain"
+        },
+        {
+            "id": 3177,
+            "name": "Antonio Rüdiger",
+            "position": "Centre-Back",
+            "dateOfBirth": "1993-03-03",
+            "nationality": "Germany"
+        },
+        {
+            "id": 1556,
+            "name": "Vinicius Junior",
+            "position": "Left Winger",
+            "dateOfBirth": "2000-07-12",
+            "nationality": "Brazil"
+        },
+        {
+            "id": 1337,
+            "name": "Éder Militão",
+            "position": "Centre-Back",
+            "dateOfBirth": "1998-01-18",
+            "nationality": "Brazil"
+        },
+        {
+            "id": 1324,
+            "name": "Rodrygo",
+            "position": "Right Winger",
+            "dateOfBirth": "2001-01-09",
+            "nationality": "Brazil"
+        },
+        {
+            "id": 349,
+            "name": "David Alaba",
+            "position": "Centre-Back",
+            "dateOfBirth": "1992-06-24",
+            "nationality": "Austria"
+        },
+        {
+            "id": 96,
+            "name": "Federico Valverde",
+            "position": "Central Midfield",
+            "dateOfBirth": "1998-07-22",
+            "nationality": "Uruguay"
+        },
+        {
+            "id": 68,
+            "name": "Dani Ceballos",
+            "position": "Central Midfield",
+            "dateOfBirth": "1996-08-07",
+            "nationality": "Spain"
+        }
+    ],
+    "staff": [],
+    "lastUpdated": "2022-02-19T08:59:31Z"
+}
