@@ -1,4 +1,6 @@
 const API_BASE = 'http://127.0.0.1:5000';
+let firstTeam= null;
+let opponentTeam = null;
 
         // Utility function to make API calls
         async function apiCall(endpoint, resultId) {

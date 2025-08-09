@@ -8,7 +8,7 @@ import os
 app = Flask(__name__, static_folder='.')
 
 # --- JSON Data Loading ---
-def load_mock_data():
+def fetch_data():
     """Load data from the mockApi.json file"""
     try:
         # Correctly locate mockApi.json in the same directory as this script
@@ -41,18 +41,18 @@ def serve_static_files(path):
 
 # --- API Routes ---
 
-@app.route('/mock-api/match')
+@app.route('/app/match')
 def get_match_data():
     """Get complete match information"""
-    data = load_mock_data()
+    data = fetch_data()
     if "error" in data:
         return jsonify(data), 404
     return jsonify(data.get("match", {}))
 
-@app.route('/mock-api/team/<team_type>')
+@app.route('/app/team/<team_type>')
 def get_team_data(team_type):
     """Get player data for home or away team"""
-    data = load_mock_data()
+    data = fetch_data()
     if "error" in data:
         return jsonify(data), 404
 
@@ -76,26 +76,26 @@ def get_team_data(team_type):
     }
     return jsonify(result)
 
-@app.route('/mock-api/prediction')
+@app.route('/app/prediction')
 def get_prediction_data():
     """Get all prediction data including head-to-head and form"""
-    data = load_mock_data()
+    data = fetch_data()
     if "error" in data:
         return jsonify(data), 404
     return jsonify(data.get("prediction_data", {}))
 
-@app.route('/mock-api/head-to-head')
+@app.route('/app/head-to-head')
 def get_head_to_head():
     """Get head-to-head match history"""
-    data = load_mock_data()
+    data = fetch_data()
     if "error" in data:
         return jsonify(data), 404
     return jsonify(data.get("prediction_data", {}).get("head_to_head", []))
 
-@app.route('/mock-api/form/<team_type>')
+@app.route('/app/form/<team_type>')
 def get_team_form(team_type):
     """Get form data for home or away team"""
-    data = load_mock_data()
+    data = fetch_data()
     if "error" in data:
         return jsonify(data), 404
 
@@ -106,4 +106,5 @@ def get_team_form(team_type):
     return jsonify(data.get("prediction_data", {}).get(form_key, {}))
 
 if __name__ == '__main__':
+    # Update the app.run() call if necessary
     app.run(debug=True, port=5000)

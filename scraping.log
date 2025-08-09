@@ -1,2 +1,0 @@
-2025-07-18 22:22:21,425 - ERROR - Error fetching https://www.fifacm.com/players: 403 Client Error: Forbidden for url: https://www.fifacm.com/players
-2025-07-18 22:22:21,426 - INFO - Data saved to scraped_data.json
