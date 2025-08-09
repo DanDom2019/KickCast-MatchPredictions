@@ -2,9 +2,6 @@ from flask import Flask, jsonify, send_from_directory
 import json
 import os
 
-# Create the Flask app.
-# The `static_folder` argument tells Flask where to look for files.
-# We set it to '.' which means the same directory the script is in.
 app = Flask(__name__, static_folder='.')
 
 # --- JSON Data Loading ---
