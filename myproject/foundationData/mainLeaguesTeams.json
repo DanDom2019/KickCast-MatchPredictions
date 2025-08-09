@@ -21,7 +21,7 @@
         { "TeamID": 563, "Name": "West Ham United FC" },
         { "TeamID": 1044, "Name": "AFC Bournemouth" }
     ],
-    "Ligue 1": [
+    "2015": [
         { "TeamID": 511, "Name": "Toulouse FC" },
         { "TeamID": 512, "Name": "Stade Brestois 29" },
         { "TeamID": 516, "Name": "Olympique de Marseille" },
@@ -41,7 +41,7 @@
         { "TeamID": 576, "Name": "RC Strasbourg Alsace" },
         { "TeamID": 1045, "Name": "Paris FC" }
     ],
-    "Bundesliga": [
+    "2002": [
         { "TeamID": 1, "Name": "1. FC Köln" },
         { "TeamID": 2, "Name": "TSG 1899 Hoffenheim" },
         { "TeamID": 3, "Name": "Bayer 04 Leverkusen" },
@@ -61,7 +61,7 @@
         { "TeamID": 44, "Name": "1. FC Heidenheim 1846" },
         { "TeamID": 721, "Name": "RB Leipzig" }
     ],
-    "Serie A": [
+    "2019": [
         { "TeamID": 98, "Name": "AC Milan" },
         { "TeamID": 99, "Name": "ACF Fiorentina" },
         { "TeamID": 100, "Name": "AS Roma" },
@@ -83,7 +83,7 @@
         { "TeamID": 5890, "Name": "US Lecce" },
         { "TeamID": 7397, "Name": "Como 1907" }
     ],
-    "Primera Division": [
+    "2014": [
         { "TeamID": 77, "Name": "Athletic Club" },
         { "TeamID": 78, "Name": "Club Atlético de Madrid" },
         { "TeamID": 79, "Name": "CA Osasuna" },

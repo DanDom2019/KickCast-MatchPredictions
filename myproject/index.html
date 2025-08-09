@@ -8,18 +8,28 @@
 </head>
 <body class="container mt-4">
 
-    <!-- Section 1: Choose First Team (Visible by default) -->
+    <!-- Section 1: Choose First Team -->
     <div id="step1-choose-team">
         <h2>Step 1: Choose a Team</h2>
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('team-select-list')">
-              Select League
-            </button>
-            <ul class="dropdown-menu" id="team-select-list"></ul>
+        <div class="d-flex align-items-center">
+            <!-- League Dropdown -->
+            <div class="dropdown me-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('firstTeam')">
+                  Select League
+                </button>
+                <ul class="dropdown-menu" id="first-team-league-list"></ul>
+            </div>
+            <!-- Team Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="first-team-dropdown-btn">
+                  Select Team
+                </button>
+                <ul class="dropdown-menu" id="first-team-list"></ul>
+            </div>
         </div>
     </div>
 
-    <!-- Section 2: Team Info & Opponent Choice (Hidden by default) -->
+    <!-- Section 2: Team Info & Opponent Choice (Hidden) -->
     <div id="step2-choose-opponent" class="d-none mt-4">
         <hr>
         <h2>Step 2: Review Team & Choose Opponent</h2>
@@ -30,15 +40,26 @@
         <h4>Opponent Options:</h4>
         <button class="btn btn-success" onclick="simulateNextOfficialMatch()">Simulate Next Official Match</button>
         <span class="mx-2">OR</span>
-        <div class="dropdown d-inline-block">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('opponent-select-list')">
-              Choose Custom Opponent
-            </button>
-            <ul class="dropdown-menu" id="opponent-select-list"></ul>
+        
+        <div class="d-inline-block">
+             <!-- Opponent League Dropdown -->
+            <div class="dropdown d-inline-block me-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('opponent')">
+                  Select League
+                </button>
+                <ul class="dropdown-menu" id="opponent-league-list"></ul>
+            </div>
+            <!-- Opponent Team Dropdown -->
+            <div class="dropdown d-inline-block">
+                <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="opponent-team-dropdown-btn">
+                  Select Opponent
+                </button>
+                <ul class="dropdown-menu" id="opponent-team-list"></ul>
+            </div>
         </div>
     </div>
 
-    <!-- Section 3: Simulation Result (Hidden by default) -->
+    <!-- Section 3: Simulation Result (Hidden) -->
     <div id="step3-simulation-result" class="d-none mt-4">
         <hr>
         <h2>Step 3: Simulation Result</h2>
