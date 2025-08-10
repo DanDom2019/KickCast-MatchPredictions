@@ -114,9 +114,10 @@ function selectFirstTeam(teamId, teamName) {
     // Update the button text
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
 
-    // Fetch and display the team's data in the info box
-    apiCall(`/mock-api/team/home`, 'first-team-info'); // Using mock data for now
-
+    // Fetch and display the team's data in the info box 
+    apiCall(`/api/team/${teamId}`, 'first-team-info');
+    //fetch and display the last 10 matches for the selected team
+    displayLast10Matches(teamId);
     // Show the next step
     document.getElementById('step2-choose-opponent').classList.remove('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
@@ -192,3 +193,65 @@ async function apiCall(endpoint, resultId) {
         resultDiv.innerHTML = `<p class="text-danger">Network or Server Error: ${error.message}</p>`;
     }
 }
+
+
+// ==================================================================
+//dynamic table section
+/**
+ * Fetches and displays the last 10 matches in a table.
+ * @param {number} teamId - The ID of the team.
+ */
+async function displayLast10Matches(teamId) {
+    const tableBody = document.getElementById('last10-table-body');
+    const loadingState = document.getElementById('last10-loading-state');
+    const endpoint = `/app/team/${teamId}/last10matches`;
+
+    // Show loading indicator and clear previous results
+    tableBody.innerHTML = '';
+    loadingState.classList.remove('d-none');
+
+    try {
+        const response = await fetch(API_BASE + endpoint);
+        const matches = await response.json();
+
+        loadingState.classList.add('d-none'); // Hide loading indicator
+
+        if (!response.ok || matches.error) {
+            const errorHtml = `<tr><td colspan="5" class="text-center text-danger">Error: ${matches.error || 'Could not load match data.'}</td></tr>`;
+            tableBody.innerHTML = errorHtml;
+            return;
+        }
+
+        // Dynamically create a badge for the match result
+        const getResultBadge = (result) => {
+            if (result === 'Win') {
+                return `<span class="badge bg-success">${result}</span>`;
+            } else if (result === 'Loss') {
+                return `<span class="badge bg-danger">${result}</span>`;
+            } else {
+                return `<span class="badge bg-warning text-dark">${result}</span>`;
+            }
+        };
+
+        // Populate the table with match data
+        matches.forEach(match => {
+            const row = `
+                <tr>
+                    <td>${match.matchDay}</td>
+                    <td>${match.date}</td>
+                    <td>${match.opponent}</td>
+                    <td>${match.score}</td>
+                    <td>${getResultBadge(match.result)}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+    } catch (error) {
+        loadingState.classList.add('d-none');
+        const errorHtml = `<tr><td colspan="5" class="text-center text-danger">Network or Server Error: ${error.message}</td></tr>`;
+        tableBody.innerHTML = errorHtml;
+    }
+}
+
+// ==================================================================

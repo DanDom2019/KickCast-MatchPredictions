@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, send_from_directory
 import json
 import os
+from prosessData import process_preious_matches, process_last_10_games
+from fetchData import load_team_data
 
 app = Flask(__name__, static_folder='.')
 
@@ -46,32 +48,20 @@ def get_match_data():
         return jsonify(data), 404
     return jsonify(data.get("match", {}))
 
-@app.route('/app/team/<team_type>')
-def get_team_data(team_type):
-    """Get player data for home or away team"""
-    data = fetch_data()
-    if "error" in data:
-        return jsonify(data), 404
+@app.route('/api/team/<int:teamId>')
+def get_team_by_id(teamId):
+    """
+    Fetches detailed data for a specific team using its ID.
+    """
+    try:
+       
+        team_data = load_team_data(teamId) 
+        if not team_data:
+            return jsonify({"error": "Team not found"}), 404
+        return jsonify(team_data)
+    except Exception as e:
+        return jsonify({"error": "An error occurred on the server"}), 500
 
-    if team_type.lower() not in ['home', 'away']:
-        return jsonify({"error": "Team type must be 'home' or 'away'"}), 400
-
-    team_key = f"{team_type.lower()}_team"
-    team_info = data.get("match", {}).get(f"{team_type.lower()}Team", {})
-    players = data.get("prediction_data", {}).get("player_stats", {}).get(team_key, [])
-
-    for player in players:
-        if "last_five_ratings" in player and player["last_five_ratings"]:
-            player["form_rating"] = round(sum(player["last_five_ratings"]) / len(player["last_five_ratings"]), 1)
-
-    result = {
-        "team_name": team_info.get("name"),
-        "team_short_name": team_info.get("shortName"),
-        "team_id": team_info.get("id"),
-        "crest": team_info.get("crest"),
-        "players": players
-    }
-    return jsonify(result)
 
 @app.route('/app/prediction')
 def get_prediction_data():
@@ -101,6 +91,28 @@ def get_team_form(team_type):
 
     form_key = f"{team_type.lower()}_team_form"
     return jsonify(data.get("prediction_data", {}).get(form_key, {}))
+
+
+@app.route('/app/team/<int:teamId>/last10matches')
+def get_last_10_matches(teamId, leagueId=2021, season=2024):
+    """
+    Get the last 10 processed matches for a given team.
+    Note: You will need to determine the correct leagueId and season,
+    or modify process_last_10_games to not require them if they are not needed.
+    For this example, we'll use a placeholder for leagueId and season.
+    """
+    # Placeholder leagueId and season, as they are required by your function.
+    # You might want to make these dynamic in a real application.
+    leagueId = 2021 # Example: Premier League
+    season = 2024   # Example: 2024 season
+
+    try:
+        matches = process_last_10_games(leagueId=leagueId, teamId=teamId, season=season)
+        if not matches:
+            return jsonify({"error": "No matches found for this team."}), 404
+        return jsonify(matches)
+    except Exception as e:
+        return jsonify({"error": "An error occurred while fetching match data."}), 500
 
 if __name__ == '__main__':
     # Update the app.run() call if necessary
