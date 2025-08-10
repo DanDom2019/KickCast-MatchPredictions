@@ -106,7 +106,6 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches):
                 matches.extend(previous_matches)
                 current_matches_count = len(matches)
 
-    # --- MODIFICATION 3: Corrected reporting logic and fixed lambda variable ---
     if not numsMatches:
       print(f"Found {len(matches)} matches for team ID {team_id} in season {start_season}")
     else:
@@ -114,7 +113,7 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches):
       matches.sort(key=lambda match: match['utcDate'], reverse=True)
       final_matches = matches[:numsMatches] # Get the final list
 
-      # Now, print an accurate message based on the flags and stored season
+      # print an accurate message based on the flags and stored season
       if combo is False and noShow is False:
         print(f" Found {len(final_matches)} matches for team ID {team_id} in season {start_season}")
       elif noShow is True:
@@ -133,6 +132,6 @@ def filter_matches_by_team_id(team_id, matches):
 #test and example usage
 if __name__ == "__main__":
 
-    data=retrieve_matches_for_team(leagueId=2021, season=2024, team_id=64, numsMatches=40)
+    data=retrieve_matches_for_team(leagueId=2021, season=2025 , team_id=563, numsMatches=40)
     # Summarize leagues by printing id and name
     print(data)
