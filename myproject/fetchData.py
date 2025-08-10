@@ -124,6 +124,8 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches):
       
       return final_matches
     return matches
+
+
 def filter_matches_by_team_id(team_id, matches):
     matches = [match for match in matches if match['homeTeam']['id'] == team_id or match['awayTeam']['id'] == team_id]
     return matches

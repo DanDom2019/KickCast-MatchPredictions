@@ -1,0 +1,482 @@
+[
+  {
+    "position": 1,
+    "team": "Liverpool",
+    "teamId": 64,
+    "matches": 38,
+    "wins": 25,
+    "draws": 9,
+    "losses": 4,
+    "goalsFor": 86,
+    "goalsAgainst": 41,
+    "points": 84,
+    "xG": {
+      "value": 93.24,
+      "differential": 7.24
+    },
+    "xGA": {
+      "value": 42.32,
+      "differential": 1.32
+    },
+    "xPTS": {
+      "value": 81.84,
+      "differential": -2.16
+    }
+  },
+  {
+    "position": 2,
+    "team": "Arsenal",
+    "teamId": 57,
+    "matches": 38,
+    "wins": 20,
+    "draws": 14,
+    "losses": 4,
+    "goalsFor": 69,
+    "goalsAgainst": 34,
+    "points": 74,
+    "xG": {
+      "value": 73.57,
+      "differential": 4.57
+    },
+    "xGA": {
+      "value": 39.98,
+      "differential": 5.98
+    },
+    "xPTS": {
+      "value": 72.96,
+      "differential": -1.04
+    }
+  },
+  {
+    "position": 3,
+    "team": "Manchester City",
+    "teamId": 65,
+    "matches": 38,
+    "wins": 21,
+    "draws": 8,
+    "losses": 9,
+    "goalsFor": 72,
+    "goalsAgainst": 44,
+    "points": 71,
+    "xG": {
+      "value": 73.15,
+      "differential": 1.15
+    },
+    "xGA": {
+      "value": 52.90,
+      "differential": 8.90
+    },
+    "xPTS": {
+      "value": 64.66,
+      "differential": -6.34
+    }
+  },
+  {
+    "position": 4,
+    "team": "Chelsea",
+    "teamId": 61,
+    "matches": 38,
+    "wins": 20,
+    "draws": 9,
+    "losses": 9,
+    "goalsFor": 64,
+    "goalsAgainst": 43,
+    "points": 69,
+    "xG": {
+      "value": 73.12,
+      "differential": 9.12
+    },
+    "xGA": {
+      "value": 54.26,
+      "differential": 11.26
+    },
+    "xPTS": {
+      "value": 62.56,
+      "differential": -6.44
+    }
+  },
+  {
+    "position": 5,
+    "team": "Newcastle United",
+    "teamId": 67,
+    "matches": 38,
+    "wins": 20,
+    "draws": 6,
+    "losses": 12,
+    "goalsFor": 68,
+    "goalsAgainst": 47,
+    "points": 66,
+    "xG": {
+      "value": 71.48,
+      "differential": 3.48
+    },
+    "xGA": {
+      "value": 53.98,
+      "differential": 6.98
+    },
+    "xPTS": {
+      "value": 62.61,
+      "differential": -3.39
+    }
+  },
+  {
+    "position": 6,
+    "team": "Aston Villa",
+    "teamId": 58,
+    "matches": 38,
+    "wins": 19,
+    "draws": 9,
+    "losses": 10,
+    "goalsFor": 58,
+    "goalsAgainst": 51,
+    "points": 66,
+    "xG": {
+      "value": 66.39,
+      "differential": 8.39
+    },
+    "xGA": {
+      "value": 55.00,
+      "differential": 4.00
+    },
+    "xPTS": {
+      "value": 61.53,
+      "differential": -4.47
+    }
+  },
+  {
+    "position": 7,
+    "team": "Nottingham Forest",
+    "teamId": 351,
+    "matches": 38,
+    "wins": 19,
+    "draws": 8,
+    "losses": 11,
+    "goalsFor": 58,
+    "goalsAgainst": 46,
+    "points": 65,
+    "xG": {
+      "value": 52.75,
+      "differential": -5.25
+    },
+    "xGA": {
+      "value": 55.92,
+      "differential": 9.92
+    },
+    "xPTS": {
+      "value": 50.01,
+      "differential": -14.99
+    }
+  },
+  {
+    "position": 8,
+    "team": "Brighton",
+    "teamId": 397,
+    "matches": 38,
+    "wins": 16,
+    "draws": 13,
+    "losses": 9,
+    "goalsFor": 66,
+    "goalsAgainst": 59,
+    "points": 61,
+    "xG": {
+      "value": 65.28,
+      "differential": -0.72
+    },
+    "xGA": {
+      "value": 59.12,
+      "differential": 0.12
+    },
+    "xPTS": {
+      "value": 57.26,
+      "differential": -3.74
+    }
+  },
+  {
+    "position": 9,
+    "team": "Bournemouth",
+    "teamId": 1044,
+    "matches": 38,
+    "wins": 15,
+    "draws": 11,
+    "losses": 12,
+    "goalsFor": 58,
+    "goalsAgainst": 46,
+    "points": 56,
+    "xG": {
+      "value": 72.62,
+      "differential": 14.62
+    },
+    "xGA": {
+      "value": 53.99,
+      "differential": 7.99
+    },
+    "xPTS": {
+      "value": 65.03,
+      "differential": 9.03
+    }
+  },
+  {
+    "position": 10,
+    "team": "Brentford",
+    "teamId": 402,
+    "matches": 38,
+    "wins": 16,
+    "draws": 8,
+    "losses": 14,
+    "goalsFor": 66,
+    "goalsAgainst": 57,
+    "points": 56,
+    "xG": {
+      "value": 67.12,
+      "differential": 1.12
+    },
+    "xGA": {
+      "value": 60.86,
+      "differential": 3.86
+    },
+    "xPTS": {
+      "value": 54.94,
+      "differential": -1.06
+    }
+  },
+  {
+    "position": 11,
+    "team": "Fulham",
+    "teamId": 63,
+    "matches": 38,
+    "wins": 15,
+    "draws": 9,
+    "losses": 14,
+    "goalsFor": 54,
+    "goalsAgainst": 54,
+    "points": 54,
+    "xG": {
+      "value": 58.00,
+      "differential": 4.00
+    },
+    "xGA": {
+      "value": 49.23,
+      "differential": -4.77
+    },
+    "xPTS": {
+      "value": 57.60,
+      "differential": 3.60
+    }
+  },
+  {
+    "position": 12,
+    "team": "Crystal Palace",
+    "teamId": 354,
+    "matches": 38,
+    "wins": 13,
+    "draws": 14,
+    "losses": 11,
+    "goalsFor": 51,
+    "goalsAgainst": 51,
+    "points": 53,
+    "xG": {
+      "value": 67.78,
+      "differential": 16.78
+    },
+    "xGA": {
+      "value": 58.88,
+      "differential": 7.88
+    },
+    "xPTS": {
+      "value": 58.16,
+      "differential": 5.16
+    }
+  },
+  {
+    "position": 13,
+    "team": "Everton",
+    "teamId": 62,
+    "matches": 38,
+    "wins": 11,
+    "draws": 15,
+    "losses": 12,
+    "goalsFor": 42,
+    "goalsAgainst": 44,
+    "points": 48,
+    "xG": {
+      "value": 46.87,
+      "differential": 4.87
+    },
+    "xGA": {
+      "value": 53.66,
+      "differential": 9.66
+    },
+    "xPTS": {
+      "value": 47.65,
+      "differential": -0.35
+    }
+  },
+  {
+    "position": 14,
+    "team": "West Ham",
+    "teamId": 563,
+    "matches": 38,
+    "wins": 11,
+    "draws": 10,
+    "losses": 17,
+    "goalsFor": 46,
+    "goalsAgainst": 62,
+    "points": 43,
+    "xG": {
+      "value": 50.59,
+      "differential": 4.59
+    },
+    "xGA": {
+      "value": 68.09,
+      "differential": 6.09
+    },
+    "xPTS": {
+      "value": 41.76,
+      "differential": -1.24
+    }
+  },
+  {
+    "position": 15,
+    "team": "Manchester United",
+    "teamId": 66,
+    "matches": 38,
+    "wins": 11,
+    "draws": 9,
+    "losses": 18,
+    "goalsFor": 44,
+    "goalsAgainst": 54,
+    "points": 42,
+    "xG": {
+      "value": 56.91,
+      "differential": 12.91
+    },
+    "xGA": {
+      "value": 60.73,
+      "differential": 6.73
+    },
+    "xPTS": {
+      "value": 52.24,
+      "differential": 10.24
+    }
+  },
+  {
+    "position": 16,
+    "team": "Wolverhampton Wanderers",
+    "teamId": 76,
+    "matches": 38,
+    "wins": 12,
+    "draws": 6,
+    "losses": 20,
+    "goalsFor": 54,
+    "goalsAgainst": 69,
+    "points": 42,
+    "xG": {
+      "value": 45.37,
+      "differential": -8.63
+    },
+    "xGA": {
+      "value": 61.57,
+      "differential": -7.43
+    },
+    "xPTS": {
+      "value": 41.45,
+      "differential": -0.55
+    }
+  },
+  {
+    "position": 17,
+    "team": "Tottenham",
+    "teamId": 73,
+    "matches": 38,
+    "wins": 11,
+    "draws": 5,
+    "losses": 22,
+    "goalsFor": 64,
+    "goalsAgainst": 65,
+    "points": 38,
+    "xG": {
+      "value": 65.36,
+      "differential": 1.36
+    },
+    "xGA": {
+      "value": 68.23,
+      "differential": 3.23
+    },
+    "xPTS": {
+      "value": 50.07,
+      "differential": 12.07
+    }
+  },
+  {
+    "position": 18,
+    "team": "Leicester",
+    "teamId": null,
+    "matches": 38,
+    "wins": 6,
+    "draws": 7,
+    "losses": 25,
+    "goalsFor": 33,
+    "goalsAgainst": 80,
+    "points": 25,
+    "xG": {
+      "value": 38.06,
+      "differential": 5.06
+    },
+    "xGA": {
+      "value": 85.89,
+      "differential": 5.89
+    },
+    "xPTS": {
+      "value": 26.43,
+      "differential": 1.43
+    }
+  },
+  {
+    "position": 19,
+    "team": "Ipswich",
+    "teamId": null,
+    "matches": 38,
+    "wins": 4,
+    "draws": 10,
+    "losses": 24,
+    "goalsFor": 36,
+    "goalsAgainst": 82,
+    "points": 22,
+    "xG": {
+      "value": 40.42,
+      "differential": 4.42
+    },
+    "xGA": {
+      "value": 83.73,
+      "differential": 1.73
+    },
+    "xPTS": {
+      "value": 28.45,
+      "differential": 6.45
+    }
+  },
+  {
+    "position": 20,
+    "team": "Southampton",
+    "teamId": null,
+    "matches": 38,
+    "wins": 2,
+    "draws": 6,
+    "losses": 30,
+    "goalsFor": 26,
+    "goalsAgainst": 86,
+    "points": 12,
+    "xG": {
+      "value": 38.63,
+      "differential": 12.63
+    },
+    "xGA": {
+      "value": 98.35,
+      "differential": 12.35
+    },
+    "xPTS": {
+      "value": 22.69,
+      "differential": 10.69
+    }
+  }
+]
