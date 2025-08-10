@@ -124,6 +124,35 @@ function selectFirstTeam(teamId, teamName) {
 }
 
 /**
+ * Builds and displays a formatted card with team information.
+ * @param {object} teamData - The JSON data for the team.
+ * @param {string} elementId - The ID of the container to put the card in.
+ */
+function displayTeamInfo(teamData, elementId) {
+    const container = document.getElementById(elementId);
+
+    // Check if we have the data we need
+    if (!teamData || !teamData.crest || !teamData.name || !teamData.venue) {
+        container.innerHTML = `<p class="text-danger">Could not display team info due to missing data.</p>`;
+        return;
+    }
+
+    // Create the HTML for the card
+    const teamCardHtml = `
+        <div class="d-flex align-items-center">
+            <img src="${teamData.crest}" alt="${teamData.name} logo" style="width: 75px; height: 75px; margin-right: 15px;">
+            <div>
+                <h4 class="mb-1">${teamData.name}</h4>
+                <p class="mb-0 text-muted"><strong>Venue:</strong> ${teamData.venue}</p>
+            </div>
+        </div>
+    `;
+
+    // Set the container's content to our new card
+    container.innerHTML = teamCardHtml;
+}
+
+/**
  * Called when the user selects the opponent team.
  */
 function selectOpponentTeam(teamId, teamName) {
@@ -174,7 +203,7 @@ function runSimulation() {
 
 /**
  * A helper function to fetch data from the backend and display it.
- * @param {string} endpoint - The API endpoint to call 
+ * @param {string} endpoint - The API endpoint to call.
  * @param {string} resultId - The ID of the HTML element to display the result in.
  */
 async function apiCall(endpoint, resultId) {
@@ -185,7 +214,14 @@ async function apiCall(endpoint, resultId) {
         const data = await response.json();
 
         if (response.ok) {
-            resultDiv.innerHTML = '<h3>Simulation Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            // *** THIS IS THE KEY CHANGE ***
+            // If we are updating the team info, use our special function.
+            if (resultId === 'first-team-info') {
+                displayTeamInfo(data, resultId);
+            } else {
+                // Otherwise, use a method for simulation results, etc.
+                resultDiv.innerHTML = '<h3>Simulation Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            }
         } else {
             resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
         }
