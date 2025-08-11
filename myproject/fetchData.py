@@ -18,6 +18,22 @@ def fetch_leagues_teams():
     data = fetch("/competitions")
     return data
 
+def fetch_all_teams_matches_in_season(leagueId, season=None):
+    """
+    Fetches all matches for a specific league and season.
+    :param leagueId: The ID of the league to fetch matches for.
+    :param season: Optional season to filter matches.
+    :return: A list of matches in the specified league and season.
+    """
+    params = {
+        "status": "FINISHED",
+        "season": season
+    }
+    #since it only can fetch 100 set per time. so we start with match day 1-10 first
+    
+    data = fetch(f"/competitions/{leagueId}/matches", params=params)
+    return data
+
 def fetch_teams():
     data = fetch("/teams")
     return data
@@ -74,7 +90,7 @@ def load_seasons_matches_history(leagueId, season=None):
     return matches
     
 #fetch the matches based on the team id and season and numbers of matches as requested
-def retrieve_matches_for_team(leagueId,season, team_id, numsMatches):
+def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None):
     start_season=season
     matches = load_seasons_matches_history(leagueId=leagueId, season=season)
     # check if we need to include the previous seasons as well
@@ -132,6 +148,5 @@ def filter_matches_by_team_id(team_id, matches):
 #test and example usage
 if __name__ == "__main__":
 
-    data=retrieve_matches_for_team(leagueId=2021, season=2025 , team_id=563, numsMatches=40)
-    # Summarize leagues by printing id and name
+    data=retrieve_matches_for_team(leagueId=2021, season=2024, team_id=65, numsMatches=2)
     print(data)

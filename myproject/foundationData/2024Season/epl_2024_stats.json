@@ -1,0 +1,150 @@
+{
+    "league": "Premier League",
+    "season": "2024-2025",
+    "league_averages": {
+      "avg_home_goals": 1.637,
+      "avg_away_goals": 1.484
+    },
+    "teams": {
+      "57": {
+        "name": "Arsenal FC",
+        "attack_strength_home": 1.517,
+        "defense_strength_home": 0.627,
+        "attack_strength_away": 1.348,
+        "defense_strength_away": 0.771
+      },
+      "58": {
+        "name": "Aston Villa FC",
+        "attack_strength_home": 1.151,
+        "defense_strength_home": 0.909,
+        "attack_strength_away": 0.943,
+        "defense_strength_away": 0.904
+      },
+      "61": {
+        "name": "Chelsea FC",
+        "attack_strength_home": 1.378,
+        "defense_strength_home": 0.842,
+        "attack_strength_away": 1.415,
+        "defense_strength_away": 1.208
+      },
+      "62": {
+        "name": "Everton FC",
+        "attack_strength_home": 0.906,
+        "defense_strength_home": 0.842,
+        "attack_strength_away": 0.608,
+        "defense_strength_away": 0.844
+      },
+      "63": {
+        "name": "Fulham FC",
+        "attack_strength_home": 1.089,
+        "defense_strength_home": 0.909,
+        "attack_strength_away": 0.81,
+        "defense_strength_away": 1.332
+      },
+      "64": {
+        "name": "Liverpool FC",
+        "attack_strength_home": 1.782,
+        "defense_strength_home": 0.976,
+        "attack_strength_away": 1.685,
+        "defense_strength_away": 0.963
+      },
+      "65": {
+        "name": "Manchester City FC",
+        "attack_strength_home": 1.841,
+        "defense_strength_home": 0.693,
+        "attack_strength_away": 1.281,
+        "defense_strength_away": 0.652
+      },
+      "66": {
+        "name": "Manchester United FC",
+        "attack_strength_home": 0.965,
+        "defense_strength_home": 1.078,
+        "attack_strength_away": 0.81,
+        "defense_strength_away": 0.712
+      },
+      "67": {
+        "name": "Newcastle United FC",
+        "attack_strength_home": 1.458,
+        "defense_strength_home": 0.693,
+        "attack_strength_away": 0.876,
+        "defense_strength_away": 1.148
+      },
+      "73": {
+        "name": "Tottenham Hotspur FC",
+        "attack_strength_home": 1.29,
+        "defense_strength_home": 1.078,
+        "attack_strength_away": 1.214,
+        "defense_strength_away": 0.844
+      },
+      "76": {
+        "name": "Wolverhampton Wanderers FC",
+        "attack_strength_home": 1.029,
+        "defense_strength_home": 1.212,
+        "attack_strength_away": 0.742,
+        "defense_strength_away": 1.03
+      },
+      "338": {
+        "name": "Leicester City FC",
+        "attack_strength_home": 0.826,
+        "defense_strength_home": 1.078,
+        "attack_strength_away": 0.608,
+        "defense_strength_away": 1.391
+      },
+      "340": {
+        "name": "Southampton FC",
+        "attack_strength_home": 0.648,
+        "defense_strength_home": 1.348,
+        "attack_strength_away": 0.674,
+        "defense_strength_away": 1.753
+      },
+      "349": {
+        "name": "Ipswich Town FC",
+        "attack_strength_home": 0.648,
+        "defense_strength_home": 1.145,
+        "attack_strength_away": 0.742,
+        "defense_strength_away": 1.572
+      },
+      "351": {
+        "name": "Nottingham Forest FC",
+        "attack_strength_home": 1.029,
+        "defense_strength_home": 0.775,
+        "attack_strength_away": 0.81,
+        "defense_strength_away": 1.208
+      },
+      "354": {
+        "name": "Crystal Palace FC",
+        "attack_strength_home": 0.826,
+        "defense_strength_home": 0.775,
+        "attack_strength_away": 0.81,
+        "defense_strength_away": 1.03
+      },
+      "397": {
+        "name": "Brighton & Hove Albion FC",
+        "attack_strength_home": 0.965,
+        "defense_strength_home": 1.078,
+        "attack_strength_away": 0.943,
+        "defense_strength_away": 1.089
+      },
+      "402": {
+        "name": "Brentford FC",
+        "attack_strength_home": 1.603,
+        "defense_strength_home": 1.415,
+        "attack_strength_away": 1.078,
+        "defense_strength_away": 1.391
+      },
+      "563": {
+        "name": "West Ham United FC",
+        "attack_strength_home": 0.826,
+        "defense_strength_home": 1.212,
+        "attack_strength_away": 0.81,
+        "defense_strength_away": 1.03
+      },
+      "1044": {
+        "name": "AFC Bournemouth",
+        "attack_strength_home": 0.965,
+        "defense_strength_home": 0.909,
+        "attack_strength_away": 1.078,
+        "defense_strength_away": 1.148
+      }
+    }
+  }

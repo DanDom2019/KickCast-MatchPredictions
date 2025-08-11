@@ -11,7 +11,7 @@ def process_preious_matches(leagueId, teamId,season=None):
 
 
 #showcase the last 10 games info.
-def process_last_10_games(leagueId, teamId, season=None,matches=None):
+def process_last_X_games(leagueId, teamId, season=None,matches=None, X=10):
     """
     Processes the last 10 games for a specific team in a league.
     :param leagueId: The ID of the league.
@@ -20,7 +20,7 @@ def process_last_10_games(leagueId, teamId, season=None,matches=None):
     :return: A dictionary with processed match data.
     """
     if matches is None:
-        matches = retrieve_matches_for_team(leagueId, season, teamId, 10)
+        matches = retrieve_matches_for_team(leagueId, season, teamId, X)
     team_matches=[]
     
     for match in matches:
