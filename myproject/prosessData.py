@@ -64,6 +64,6 @@ if __name__ == "__main__":
     teamId = 66  # Example team ID for Manchester City
     season = "2024"  # Example season
 
-    last_10_games = process_last_10_games(leagueId, teamId, season)
+    last_10_games = process_last_X_games(leagueId, teamId, season)
 
     print(last_10_games)

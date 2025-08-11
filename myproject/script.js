@@ -1,33 +1,19 @@
 // --- Global State Management ---
-// These variables will store the user's choices.
 let firstTeam = null;
 let opponentTeam = null;
-const API_BASE = 'http://127.0.0.1:5000'; // Your Flask server URL
+const API_BASE = 'http://127.0.0.1:5000'; // Flask server URL
 
 // ==================================================================
-//  Functions for Populating Dropdowns from Local JSON Files
+//  Functions for Populating Dropdowns
 // ==================================================================
 
-/**
- * Fetches the list of leagues from your local JSON file.
- * @param {string} selectionType - 'firstTeam' or 'opponent'
- */
 function fetchLeagues(selectionType) {
-    console.log(`Fetching leagues for: ${selectionType}`);
     fetch('/foundationData/leagues.json')
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
+        .then(response => response.json())
         .then(leagues => {
             const leagueListId = (selectionType === 'firstTeam') ? 'first-team-league-list' : 'opponent-league-list';
             const leagueList = document.getElementById(leagueListId);
-            
-            if (!leagueList) {
-                console.error(`Error: Element with ID '${leagueListId}' not found.`);
-                return;
-            }
-            leagueList.innerHTML = ''; // Clear previous items
+            leagueList.innerHTML = '';
 
             leagues.forEach(league => {
                 const li = document.createElement('li');
@@ -37,10 +23,7 @@ function fetchLeagues(selectionType) {
                 a.textContent = league.Name;
                 a.onclick = (event) => {
                     event.preventDefault();
-                    // Update the button text
-                    const button = leagueList.previousElementSibling;
-                    button.textContent = league.Name;
-                    // Fetch the teams for the selected league
+                    leagueList.previousElementSibling.textContent = league.Name;
                     fetchTeamsByLeague(league.LeagueID, selectionType);
                 };
                 li.appendChild(a);
@@ -50,17 +33,9 @@ function fetchLeagues(selectionType) {
         .catch(error => console.error('Error fetching leagues:', error));
 }
 
-/**
- * Fetches teams for a specific league from your local JSON file.
- * @param {number} leagueId - The ID of the league to fetch teams for.
- * @param {string} selectionType - Determines which dropdown to populate ('firstTeam' or 'opponent').
- */
 function fetchTeamsByLeague(leagueId, selectionType) {
     fetch('/foundationData/mainLeaguesTeams.json')
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
+        .then(response => response.json())
         .then(allTeamsData => {
             const teams = allTeamsData[leagueId];
             if (!teams) {
@@ -70,12 +45,7 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 
             const teamListId = (selectionType === 'firstTeam') ? 'first-team-list' : 'opponent-team-list';
             const teamList = document.getElementById(teamListId);
-
-            if (!teamList) {
-                console.error(`Error: Element with ID '${teamListId}' not found.`);
-                return;
-            }
-            teamList.innerHTML = ''; // Clear previous items
+            teamList.innerHTML = '';
 
             teams.forEach(team => {
                 const li = document.createElement('li');
@@ -85,11 +55,10 @@ function fetchTeamsByLeague(leagueId, selectionType) {
                 a.textContent = team.Name;
                 a.onclick = (event) => {
                     event.preventDefault();
-                    // Call the correct function based on the step
                     if (selectionType === 'firstTeam') {
-                        selectFirstTeam(team.TeamID, team.Name);
+                        selectFirstTeam(team.TeamID, team.Name, leagueId);
                     } else {
-                        selectOpponentTeam(team.TeamID, team.Name);
+                        selectOpponentTeam(team.TeamID, team.Name, leagueId);
                     }
                 };
                 li.appendChild(a);
@@ -104,126 +73,57 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 // STEP 2: Functions for Handling the User Workflow
 // ==================================================================
 
-/**
- * Called when the user selects their first team.
- */
-function selectFirstTeam(teamId, teamName) {
-    console.log(`First team selected: ${teamName} (ID: ${teamId})`);
-    firstTeam = { id: teamId, name: teamName };
+function selectFirstTeam(teamId, teamName, leagueId) {
+    console.log(`First team selected: ${teamName} (ID: ${teamId}, League: ${leagueId})`);
+    firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
 
-    // Update the button text
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
-
-    // Fetch and display the team's data in the info box 
     apiCall(`/api/team/${teamId}`, 'first-team-info');
-    //fetch and display the last 10 matches for the selected team
-    displayLast10Matches(teamId);
-    // Show the next step
+    displayLast10Matches(teamId, leagueId, 'last10');
+
     document.getElementById('step2-choose-opponent').classList.remove('d-none');
+    document.getElementById('step3-simulation-result').classList.add('d-none');
+    document.getElementById('opponent-team-info-wrapper').classList.add('d-none');
+    document.getElementById('start-simulation-btn').classList.add('d-none');
+}
+
+function selectOpponentTeam(teamId, teamName, leagueId) {
+    console.log(`Opponent team selected: ${teamName} (ID: ${teamId})`);
+    opponentTeam = { id: teamId, name: teamName, leagueId: leagueId };
+    
+    document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
+    document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
+    
+    apiCall(`/api/team/${teamId}`, 'opponent-team-info');
+    displayLast10Matches(teamId, leagueId, 'opponent-last10');
+
+    // Show the simulation button
+    document.getElementById('start-simulation-btn').classList.remove('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
 
-/**
- * Builds and displays a formatted card with team information.
- * @param {object} teamData - The JSON data for the team.
- * @param {string} elementId - The ID of the container to put the card in.
- */
-function displayTeamInfo(teamData, elementId) {
-    const container = document.getElementById(elementId);
-
-    // Check if we have the data we need
-    if (!teamData || !teamData.crest || !teamData.name || !teamData.venue) {
-        container.innerHTML = `<p class="text-danger">Could not display team info due to missing data.</p>`;
-        return;
-    }
-
-    // Create the HTML for the card
-    const teamCardHtml = `
-        <div class="d-flex align-items-center">
-            <img src="${teamData.crest}" alt="${teamData.name} logo" style="width: 75px; height: 75px; margin-right: 15px;">
-            <div>
-                <h4 class="mb-1">${teamData.name}</h4>
-                <p class="mb-0 text-muted"><strong>Venue:</strong> ${teamData.venue}</p>
-            </div>
-        </div>
-    `;
-
-    // Set the container's content to our new card
-    container.innerHTML = teamCardHtml;
-}
-
-/**
- * Called when the user selects the opponent team.
- */
-function selectOpponentTeam(teamId, teamName) {
-    console.log(`Opponent team selected: ${teamName} (ID: ${teamId})`);
-    opponentTeam = { id: teamId, name: teamName };
-
-    // Update the button text
-    document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
-
-    // Run the simulation now that both teams are selected
-    runSimulation();
-}
-
-/**
- * Placeholder for the "Next Official Match" feature.
- */
-function simulateNextOfficialMatch() {
+async function simulateNextOfficialMatch() {
     if (!firstTeam) {
         alert("Please select a team first.");
         return;
     }
-    // For now, we'll use a hardcoded opponent for demonstration
-    opponentTeam = { id: 66, name: "Manchester United FC" };
-    console.log(`Simulating next official match against: ${opponentTeam.name}`);
-    runSimulation();
-}
-
-/**
- * Calls the Python backend to get the final prediction.
- */
-function runSimulation() {
-    if (!firstTeam || !opponentTeam) {
-        alert("Error: Both teams must be selected for simulation.");
-        return;
-    }
-
-    const endpoint = `/simulation/predict?home=${firstTeam.id}&away=${opponentTeam.id}`;
-
-    // Show the final result section and trigger the API call
+    const endpoint = `/api/team/${firstTeam.id}/next_match`;
+    const resultDiv = document.getElementById('match-result-display');
+    resultDiv.innerHTML = 'Finding next official match...';
     document.getElementById('step3-simulation-result').classList.remove('d-none');
-    apiCall(endpoint, 'match-result-display');
-}
 
 
-// ==================================================================
-// STEP 3: Utility Function for Making API Calls
-// ==================================================================
-
-/**
- * A helper function to fetch data from the backend and display it.
- * @param {string} endpoint - The API endpoint to call.
- * @param {string} resultId - The ID of the HTML element to display the result in.
- */
-async function apiCall(endpoint, resultId) {
-    const resultDiv = document.getElementById(resultId);
-    resultDiv.innerHTML = 'Loading...';
     try {
         const response = await fetch(API_BASE + endpoint);
-        const data = await response.json();
+        const nextMatch = await response.json();
 
         if (response.ok) {
-            // *** THIS IS THE KEY CHANGE ***
-            // If we are updating the team info, use our special function.
-            if (resultId === 'first-team-info') {
-                displayTeamInfo(data, resultId);
-            } else {
-                // Otherwise, use a method for simulation results, etc.
-                resultDiv.innerHTML = '<h3>Simulation Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
-            }
+            document.getElementById('step3-simulation-result').classList.add('d-none');
+            const opponent = nextMatch.awayTeam.id === firstTeam.id ? nextMatch.homeTeam : nextMatch.awayTeam;
+            const opponentLeagueId = nextMatch.competition.id;
+            selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
         } else {
-            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(nextMatch, null, 2) + '</pre>';
         }
     } catch (error) {
         resultDiv.innerHTML = `<p class="text-danger">Network or Server Error: ${error.message}</p>`;
@@ -232,44 +132,65 @@ async function apiCall(endpoint, resultId) {
 
 
 // ==================================================================
-//dynamic table section
-/**
- * Fetches and displays the last 10 matches in a table.
- * @param {number} teamId - The ID of the team.
- */
-async function displayLast10Matches(teamId) {
-    const tableBody = document.getElementById('last10-table-body');
-    const loadingState = document.getElementById('last10-loading-state');
-    const endpoint = `/app/team/${teamId}/last10matches`;
+// STEP 3: Display and Simulation Functions
+// ==================================================================
 
-    // Show loading indicator and clear previous results
+function displayTeamInfo(teamData, elementId) {
+    const container = document.getElementById(elementId);
+    if (!teamData || !teamData.crest || !teamData.name || !teamData.venue || !teamData.area) {
+        container.innerHTML = `<p class="text-danger">Could not display team info due to missing data.</p>`;
+        return;
+    }
+    const teamCardHtml = `
+        <div class="d-flex align-items-center">
+            <img src="${teamData.crest}" alt="${teamData.name} logo" style="width: 75px; height: 75px; margin-right: 15px;">
+            <div>
+                <h4 class="mb-1">${teamData.name}
+                <img src="${teamData.area.flag}" alt="${teamData.area.name} flag" style="width: 40px; height: auto; margin-left: 10px;">
+                </h4>  
+                <p class="mb-0 text-muted"><strong>Venue:</strong> ${teamData.venue}</p>
+                <p class="mb-0 text-muted"><strong>Founded:</strong> ${teamData.founded || 'N/A'}</p>
+            </div>
+        </div>
+    `;
+    container.innerHTML = teamCardHtml;
+}
+
+function runSimulation() {
+    if (!firstTeam || !opponentTeam) {
+        alert("Error: Both teams must be selected for simulation.");
+        return;
+    }
+    // Using the mock API endpoint for now
+    const endpoint = `/app/prediction`; 
+    document.getElementById('step3-simulation-result').classList.remove('d-none');
+    apiCall(endpoint, 'match-result-display');
+}
+
+async function displayLast10Matches(teamId, leagueId, tableType) {
+    const tableBody = document.getElementById(`${tableType}-table-body`);
+    const loadingState = document.getElementById(`${tableType}-loading-state`);
+    const endpoint = `/app/team/${teamId}/last10matches?leagueId=${leagueId}`;
+
     tableBody.innerHTML = '';
     loadingState.classList.remove('d-none');
 
     try {
         const response = await fetch(API_BASE + endpoint);
         const matches = await response.json();
-
-        loadingState.classList.add('d-none'); // Hide loading indicator
+        loadingState.classList.add('d-none');
 
         if (!response.ok || matches.error) {
-            const errorHtml = `<tr><td colspan="5" class="text-center text-danger">Error: ${matches.error || 'Could not load match data.'}</td></tr>`;
-            tableBody.innerHTML = errorHtml;
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Error: ${matches.error || 'Could not load match data.'}</td></tr>`;
             return;
         }
 
-        // Dynamically create a badge for the match result
         const getResultBadge = (result) => {
-            if (result === 'Win') {
-                return `<span class="badge bg-success">${result}</span>`;
-            } else if (result === 'Loss') {
-                return `<span class="badge bg-danger">${result}</span>`;
-            } else {
-                return `<span class="badge bg-warning text-dark">${result}</span>`;
-            }
+            if (result === 'Win') return `<span class="badge bg-success">${result}</span>`;
+            if (result === 'Loss') return `<span class="badge bg-danger">${result}</span>`;
+            return `<span class="badge bg-warning text-dark">${result}</span>`;
         };
 
-        // Populate the table with match data
         matches.forEach(match => {
             const row = `
                 <tr>
@@ -285,9 +206,32 @@ async function displayLast10Matches(teamId) {
 
     } catch (error) {
         loadingState.classList.add('d-none');
-        const errorHtml = `<tr><td colspan="5" class="text-center text-danger">Network or Server Error: ${error.message}</td></tr>`;
-        tableBody.innerHTML = errorHtml;
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Network or Server Error: ${error.message}</td></tr>`;
     }
 }
 
+
 // ==================================================================
+//  Utility Function for API Calls
+// ==================================================================
+
+async function apiCall(endpoint, resultId) {
+    const resultDiv = document.getElementById(resultId);
+    resultDiv.innerHTML = 'Loading...';
+    try {
+        const response = await fetch(API_BASE + endpoint);
+        const data = await response.json();
+
+        if (response.ok) {
+            if (resultId.includes('-team-info')) {
+                displayTeamInfo(data, resultId);
+            } else {
+                resultDiv.innerHTML = '<h3>Simulation Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            }
+        } else {
+            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        }
+    } catch (error) {
+        resultDiv.innerHTML = `<p class="text-danger">Network or Server Error: ${error.message}</p>`;
+    }
+}
