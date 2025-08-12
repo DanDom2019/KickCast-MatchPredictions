@@ -1,9 +1,8 @@
-// --- Global State Management ---
 let firstTeam = null;
 let opponentTeam = null;
-let nextMatchDetails = null; // Variable to hold upcoming match info
-let predictionChart = null; // Variable to hold our chart instance
-const API_BASE = 'http://127.0.0.1:5000'; // Your Flask server URL
+let nextMatchDetails = null; 
+let predictionChart = null; 
+const API_BASE = 'http://127.0.0.1:5000';
 
 // ==================================================================
 //  Functions for Populating Dropdowns
@@ -40,10 +39,7 @@ function fetchTeamsByLeague(leagueId, selectionType) {
         .then(response => response.json())
         .then(allTeamsData => {
             const teams = allTeamsData[leagueId];
-            if (!teams) {
-                console.error(`No teams found for league ID: ${leagueId}`);
-                return;
-            }
+            if (!teams) return;
 
             const teamListId = (selectionType === 'firstTeam') ? 'first-team-list' : 'opponent-team-list';
             const teamList = document.getElementById(teamListId);
@@ -60,8 +56,7 @@ function fetchTeamsByLeague(leagueId, selectionType) {
                     if (selectionType === 'firstTeam') {
                         selectFirstTeam(team.TeamID, team.Name, leagueId);
                     } else {
-                        // When selecting an opponent manually, we don't have next match data
-                        nextMatchDetails = null;
+                        nextMatchDetails = null; 
                         selectOpponentTeam(team.TeamID, team.Name, leagueId);
                     }
                 };
@@ -80,10 +75,22 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 function selectFirstTeam(teamId, teamName, leagueId) {
     firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
+    
+
+    // 1. Trigger the upward animation
+    document.getElementById('main-container').classList.add('content-moved-up');
+    
+    // 2. Show the details container at the top
+    document.getElementById('first-team-details-container').classList.remove('d-none');
+    
+    // 3. Populate the details
     apiCall(`/api/team/${teamId}`, 'first-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'last10');
 
-    document.getElementById('step2-choose-opponent').classList.remove('d-none');
+    // 4. Show the opponent selection step
+    document.getElementById('step2-container').classList.remove('d-none');
+
+    // 5. Hide other sections
     document.getElementById('opponent-team-info-wrapper').classList.add('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
@@ -97,7 +104,7 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
     apiCall(`/api/team/${teamId}`, 'opponent-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'opponent-last10');
 
-    displayMatchDetails(); // Show match details if available
+    displayMatchDetails(); 
 
     document.getElementById('start-simulation-btn').classList.remove('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
@@ -109,23 +116,21 @@ async function simulateNextOfficialMatch() {
         return;
     }
     const endpoint = `/api/team/${firstTeam.id}/next_match`;
-    const resultDiv = document.getElementById('match-result-display');
-    resultDiv.innerHTML = 'Finding next official match...';
     
     try {
         const response = await fetch(API_BASE + endpoint);
         const matchData = await response.json();
 
         if (response.ok) {
-            nextMatchDetails = matchData; // Store the full details
+            nextMatchDetails = matchData; 
             const opponent = matchData.awayTeam.id === firstTeam.id ? matchData.homeTeam : matchData.awayTeam;
             const opponentLeagueId = matchData.competition.id;
             selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
         } else {
-            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(matchData, null, 2) + '</pre>';
+            alert(`Error finding next match: ${matchData.error}`);
         }
     } catch (error) {
-        resultDiv.innerHTML = `<p class="text-danger">Network Error: ${error.message}</p>`;
+        alert(`Network Error: ${error.message}`);
     }
 }
 
