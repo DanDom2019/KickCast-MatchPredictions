@@ -83,21 +83,57 @@ def load_seasons_matches_history(leagueId, season=None):
         print(f"Failed to fetch matches for season {season}")
         return 
     if data['resultSet']['count'] == 0:
-        print(f"No matches found for season {season}")
+        print(f"No matches found for season {season}...")
         return 
 
     matches = data['matches']
     return matches
-    
+
+def calculate_league_averages(matches):
+    """
+    Calculates the average home and away goals for a whole season.
+    :param matches: A list of match data dictionaries.
+    :return: A dictionary containing the calculated averages.
+    """
+    total_home_goals = 0
+    total_away_goals = 0
+    total_matches = len(matches)
+
+    if total_matches == 0:
+        return {"avg_home_goals": 0, "avg_away_goals": 0}
+
+    for match in matches:
+        # Ensure the score and fullTime keys exist and are not None
+        if match.get('score') and match['score'].get('fullTime'):
+            home_goals = match['score']['fullTime'].get('home')
+            away_goals = match['score']['fullTime'].get('away')
+            
+            if home_goals is not None:
+                total_home_goals += home_goals
+            if away_goals is not None:
+                total_away_goals += away_goals
+
+    avg_home_goals = total_home_goals / total_matches
+    avg_away_goals = total_away_goals / total_matches
+
+    return {
+        "avg_home_goals": round(avg_home_goals, 3),
+        "avg_away_goals": round(avg_away_goals, 3)
+    }
+
 #fetch the matches based on the team id and season and numbers of matches as requested
-def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None):
+def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None,noMatch=False):
     start_season=season
     matches = load_seasons_matches_history(leagueId=leagueId, season=season)
+    if noMatch:
+            print(f"No matches found for season {season}!")
+            return None
     # check if we need to include the previous seasons as well
     #if there is no matches for the current season, we can fetch the previous seasons
     combo = False
     noShow = False
     if matches is None:
+        
         noShow=True
         season = season - 1
         # Fetch matches for the previous season
@@ -109,6 +145,9 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None):
         # Filter matches involving the specified team
         matches = filter_matches_by_team_id(team_id, matches)
         current_matches_count = len(matches)
+        if not numsMatches:
+            print(f"Found {len(matches)} matches for team ID {team_id} in season {start_season}")
+            return matches
         if current_matches_count < numsMatches:
             # Fetch matches from previous seasons until we have enough matches
             while current_matches_count < numsMatches:
@@ -122,22 +161,24 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None):
                 matches.extend(previous_matches)
                 current_matches_count = len(matches)
 
-    if not numsMatches:
-      print(f"Found {len(matches)} matches for team ID {team_id} in season {start_season}")
+    
     else:
       # Fix the lambda variable from 'numsMatches' to 'match'
       matches.sort(key=lambda match: match['utcDate'], reverse=True)
-      final_matches = matches[:numsMatches] # Get the final list
+      if numsMatches is None:
+          return matches
+      else:
+        final_matches = matches[:numsMatches] # Get the final list
 
-      # print an accurate message based on the flags and stored season
-      if combo is False and noShow is False:
-        print(f" Found {len(final_matches)} matches for team ID {team_id} in season {start_season}")
-      elif noShow is True:
-        print(f"Found {len(final_matches)} matches for team ID {team_id} from season {start_season - 1} and earlier.")
-      else: # This means 'combo' is True
-        print(f"Found {len(final_matches)} matches for team ID {team_id} by combining season {start_season} with previous seasons.")
-      
-      return final_matches
+        # print an accurate message based on the flags and stored season
+        if combo is False and noShow is False:
+            print(f" Found {len(final_matches)} matches for team ID {team_id} in season {start_season}")
+        elif noShow is True:
+            print(f"Found {len(final_matches)} matches for team ID {team_id} from season {start_season - 1} and earlier.")
+        else: # This means 'combo' is True
+            print(f"Found {len(final_matches)} matches for team ID {team_id} by combining season {start_season} with previous seasons.")
+        
+        return final_matches
     return matches
 
 
@@ -148,5 +189,5 @@ def filter_matches_by_team_id(team_id, matches):
 #test and example usage
 if __name__ == "__main__":
 
-    data=retrieve_matches_for_team(leagueId=2021, season=2024, team_id=65, numsMatches=2)
+    data=retrieve_matches_for_team(leagueId=2021, season=2025, team_id=65, numsMatches=None, noMatch=True)
     print(data)
