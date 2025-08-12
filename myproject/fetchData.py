@@ -162,14 +162,13 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None,noMatch
                 current_matches_count = len(matches)
 
     
-    else:
-      # Fix the lambda variable from 'numsMatches' to 'match'
-      matches.sort(key=lambda match: match['utcDate'], reverse=True)
-      if numsMatches is None:
-          return matches
-      else:
-        final_matches = matches[:numsMatches] # Get the final list
-
+    # Sort matches by date in descending order to get the most recent ones first.
+    matches.sort(key=lambda match: match['utcDate'], reverse=True)
+    
+    # If numsMatches is specified, return only that number of matches.
+    if numsMatches:
+        final_matches = matches[:numsMatches]
+        
         # print an accurate message based on the flags and stored season
         if combo is False and noShow is False:
             print(f" Found {len(final_matches)} matches for team ID {team_id} in season {start_season}")
@@ -177,8 +176,9 @@ def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None,noMatch
             print(f"Found {len(final_matches)} matches for team ID {team_id} from season {start_season - 1} and earlier.")
         else: # This means 'combo' is True
             print(f"Found {len(final_matches)} matches for team ID {team_id} by combining season {start_season} with previous seasons.")
-        
+
         return final_matches
+
     return matches
 
 
