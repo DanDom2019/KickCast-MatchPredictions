@@ -1,7 +1,9 @@
 // --- Global State Management ---
 let firstTeam = null;
 let opponentTeam = null;
-const API_BASE = 'http://127.0.0.1:5000'; // Flask server URL
+let nextMatchDetails = null; // Variable to hold upcoming match info
+let predictionChart = null; // Variable to hold our chart instance
+const API_BASE = 'http://127.0.0.1:5000'; // Your Flask server URL
 
 // ==================================================================
 //  Functions for Populating Dropdowns
@@ -58,6 +60,8 @@ function fetchTeamsByLeague(leagueId, selectionType) {
                     if (selectionType === 'firstTeam') {
                         selectFirstTeam(team.TeamID, team.Name, leagueId);
                     } else {
+                        // When selecting an opponent manually, we don't have next match data
+                        nextMatchDetails = null;
                         selectOpponentTeam(team.TeamID, team.Name, leagueId);
                     }
                 };
@@ -74,30 +78,27 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 // ==================================================================
 
 function selectFirstTeam(teamId, teamName, leagueId) {
-    console.log(`First team selected: ${teamName} (ID: ${teamId}, League: ${leagueId})`);
     firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
-
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
-    apiCall(`/api/team/${teamId}`, 'first-team-info');
+    apiCall(`/api/team/${teamId}`, 'first-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'last10');
 
     document.getElementById('step2-choose-opponent').classList.remove('d-none');
-    document.getElementById('step3-simulation-result').classList.add('d-none');
     document.getElementById('opponent-team-info-wrapper').classList.add('d-none');
-    document.getElementById('start-simulation-btn').classList.add('d-none');
+    document.getElementById('step3-simulation-result').classList.add('d-none');
 }
 
 function selectOpponentTeam(teamId, teamName, leagueId) {
-    console.log(`Opponent team selected: ${teamName} (ID: ${teamId})`);
     opponentTeam = { id: teamId, name: teamName, leagueId: leagueId };
     
     document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
     document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
     
-    apiCall(`/api/team/${teamId}`, 'opponent-team-info');
+    apiCall(`/api/team/${teamId}`, 'opponent-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'opponent-last10');
 
-    // Show the simulation button
+    displayMatchDetails(); // Show match details if available
+
     document.getElementById('start-simulation-btn').classList.remove('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
@@ -110,23 +111,21 @@ async function simulateNextOfficialMatch() {
     const endpoint = `/api/team/${firstTeam.id}/next_match`;
     const resultDiv = document.getElementById('match-result-display');
     resultDiv.innerHTML = 'Finding next official match...';
-    document.getElementById('step3-simulation-result').classList.remove('d-none');
-
-
+    
     try {
         const response = await fetch(API_BASE + endpoint);
-        const nextMatch = await response.json();
+        const matchData = await response.json();
 
         if (response.ok) {
-            document.getElementById('step3-simulation-result').classList.add('d-none');
-            const opponent = nextMatch.awayTeam.id === firstTeam.id ? nextMatch.homeTeam : nextMatch.awayTeam;
-            const opponentLeagueId = nextMatch.competition.id;
+            nextMatchDetails = matchData; // Store the full details
+            const opponent = matchData.awayTeam.id === firstTeam.id ? matchData.homeTeam : matchData.awayTeam;
+            const opponentLeagueId = matchData.competition.id;
             selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
         } else {
-            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(nextMatch, null, 2) + '</pre>';
+            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(matchData, null, 2) + '</pre>';
         }
     } catch (error) {
-        resultDiv.innerHTML = `<p class="text-danger">Network or Server Error: ${error.message}</p>`;
+        resultDiv.innerHTML = `<p class="text-danger">Network Error: ${error.message}</p>`;
     }
 }
 
@@ -138,7 +137,7 @@ async function simulateNextOfficialMatch() {
 function displayTeamInfo(teamData, elementId) {
     const container = document.getElementById(elementId);
     if (!teamData || !teamData.crest || !teamData.name || !teamData.venue || !teamData.area) {
-        container.innerHTML = `<p class="text-danger">Could not display team info due to missing data.</p>`;
+        container.innerHTML = `<p class="text-danger">Could not display team info.</p>`;
         return;
     }
     const teamCardHtml = `
@@ -156,16 +155,141 @@ function displayTeamInfo(teamData, elementId) {
     container.innerHTML = teamCardHtml;
 }
 
+function displayMatchDetails() {
+    const detailsWrapper = document.getElementById('match-details-wrapper');
+    const detailsContent = document.getElementById('match-details-content');
+
+    if (nextMatchDetails) {
+        const matchDate = new Date(nextMatchDetails.utcDate);
+        const formattedDate = matchDate.toLocaleString();
+
+        detailsContent.innerHTML = `
+            <p class="mb-1"><strong>Date & Time:</strong> ${formattedDate}</p>
+            <p class="mb-0"><strong>Venue:</strong> ${nextMatchDetails.venue}</p>
+        `;
+        detailsWrapper.classList.remove('d-none');
+    } else {
+        detailsWrapper.classList.add('d-none');
+    }
+}
+
 function runSimulation() {
     if (!firstTeam || !opponentTeam) {
-        alert("Error: Both teams must be selected for simulation.");
+        alert("Error: Both teams must be selected.");
         return;
     }
-    // Using the mock API endpoint for now
-    const endpoint = `/app/prediction`; 
+    const endpoint = `/simulation/predict?home=${firstTeam.id}&away=${opponentTeam.id}&leagueId=${firstTeam.leagueId}`;
     document.getElementById('step3-simulation-result').classList.remove('d-none');
-    apiCall(endpoint, 'match-result-display');
+    apiCall(endpoint, 'match-result-display', displayPredictionResult);
 }
+
+function displayPredictionResult(data, elementId) {
+    const container = document.getElementById(elementId);
+    if (!data || data.error) {
+        container.innerHTML = `<p class="text-danger">Failed to get a valid simulation result: ${data.error || 'Unknown error'}</p>`;
+        return;
+    }
+
+    // Build the list of top five scores
+    let topScoresHtml = '';
+    data.top_five_scores.forEach(item => {
+        topScoresHtml += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Score: <strong>${item.score}</strong>
+                <span class="badge bg-info rounded-pill">${item.probability}%</span>
+            </li>
+        `;
+    });
+
+    container.innerHTML = `
+        <div class="row align-items-center">
+            <div class="col-md-5 text-center">
+                <h5>${firstTeam.name}</h5>
+                <h1 class="display-4">${data.home_team_win_probability}%</h1>
+                <p class="text-muted">Win Probability</p>
+            </div>
+            <div class="col-md-2 text-center">
+                <h5 class="text-muted">Draw</h5>
+                <h1 class="display-4">${data.draw_probability}%</h1>
+            </div>
+            <div class="col-md-5 text-center">
+                <h5>${opponentTeam.name}</h5>
+                <h1 class="display-4">${data.away_team_win_probability}%</h1>
+                <p class="text-muted">Win Probability</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-md-7">
+                <h5>Outcome Probabilities</h5>
+                <canvas id="predictionChart"></canvas>
+            </div>
+            <div class="col-md-5">
+                <h5>Top 5 Scorelines</h5>
+                <ul class="list-group mb-3"> ${topScoresHtml}
+                </ul>
+
+                <h5>Predicted Goals</h5>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${firstTeam.name}:
+                        <span class="badge bg-primary rounded-pill">${data.predicted_goals_home}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${opponentTeam.name}:
+                        <span class="badge bg-primary rounded-pill">${data.predicted_goals_away}</span>
+                    </li>
+                </ul>
+                </div>
+        </div>
+    `;
+    
+    // Create the chart (this part remains the same)
+    const ctx = document.getElementById('predictionChart').getContext('2d');
+    if (predictionChart) {
+        predictionChart.destroy();
+    }
+    predictionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [`${firstTeam.name} Win`, 'Draw', `${opponentTeam.name} Win`],
+            datasets: [{
+                label: 'Match Outcome Probability',
+                data: [data.home_team_win_probability, data.draw_probability, data.away_team_win_probability],
+                backgroundColor: ['rgba(75, 192, 192, 0.7)', 'rgba(255, 206, 86, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' }, title: { display: true, text: 'Match Outcome Prediction' } }
+        }
+    });
+}
+    
+    const ctx = document.getElementById('predictionChart').getContext('2d');
+    if (predictionChart) {
+        predictionChart.destroy();
+    }
+    predictionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [`${firstTeam.name} Win`, 'Draw', `${opponentTeam.name} Win`],
+            datasets: [{
+                label: 'Match Outcome Probability',
+                data: [data.home_team_win_probability, data.draw_probability, data.away_team_win_probability],
+                backgroundColor: ['rgba(75, 192, 192, 0.7)', 'rgba(255, 206, 86, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'top' }, title: { display: true, text: 'Match Outcome Prediction' } }
+        }
+    });
+
 
 async function displayLast10Matches(teamId, leagueId, tableType) {
     const tableBody = document.getElementById(`${tableType}-table-body`);
@@ -181,7 +305,7 @@ async function displayLast10Matches(teamId, leagueId, tableType) {
         loadingState.classList.add('d-none');
 
         if (!response.ok || matches.error) {
-            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Error: ${matches.error || 'Could not load match data.'}</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${matches.error || 'Could not load match data.'}</td></tr>`;
             return;
         }
 
@@ -206,7 +330,7 @@ async function displayLast10Matches(teamId, leagueId, tableType) {
 
     } catch (error) {
         loadingState.classList.add('d-none');
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Network or Server Error: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Network Error: ${error.message}</td></tr>`;
     }
 }
 
@@ -215,18 +339,18 @@ async function displayLast10Matches(teamId, leagueId, tableType) {
 //  Utility Function for API Calls
 // ==================================================================
 
-async function apiCall(endpoint, resultId) {
+async function apiCall(endpoint, resultId, displayFunction) {
     const resultDiv = document.getElementById(resultId);
-    resultDiv.innerHTML = 'Loading...';
+    resultDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
     try {
         const response = await fetch(API_BASE + endpoint);
         const data = await response.json();
 
         if (response.ok) {
-            if (resultId.includes('-team-info')) {
-                displayTeamInfo(data, resultId);
+            if (displayFunction) {
+                displayFunction(data, resultId);
             } else {
-                resultDiv.innerHTML = '<h3>Simulation Result:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                 resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
             }
         } else {
             resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
