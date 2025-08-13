@@ -5,6 +5,11 @@ from prosessData import process_last_X_games
 from fetchData import load_team_data, load_team_match_upcoming_match
 # Import your new prediction function
 from simulationModel import predict_match
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # This allows all domains by default
+
 
 app = Flask(__name__, static_folder='.')
 
