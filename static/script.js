@@ -1,16 +1,18 @@
+
+
 // --- Global State Management ---
 let firstTeam = null;
 let opponentTeam = null;
-let nextMatchDetails = null; // Variable to hold upcoming match info
-let predictionChart = null; // Variable to hold our chart instance
-const API_BASE = 'http://127.0.0.1:5000'; // Your Flask server URL
+let nextMatchDetails = null;
+let predictionChart = null;
+const API_BASE = 'http://127.0.0.1:5000';
 
 // ==================================================================
 //  Functions for Populating Dropdowns
 // ==================================================================
 
 function fetchLeagues(selectionType) {
-    fetch('/foundationData/leagues.json')
+    fetch('/static/foundationData/leagues.json')
         .then(response => response.json())
         .then(leagues => {
             const leagueListId = (selectionType === 'firstTeam') ? 'first-team-league-list' : 'opponent-league-list';
@@ -36,14 +38,11 @@ function fetchLeagues(selectionType) {
 }
 
 function fetchTeamsByLeague(leagueId, selectionType) {
-    fetch('/foundationData/mainLeaguesTeams.json')
+    fetch('/static/foundationData/mainLeaguesTeams.json')
         .then(response => response.json())
         .then(allTeamsData => {
             const teams = allTeamsData[leagueId];
-            if (!teams) {
-                console.error(`No teams found for league ID: ${leagueId}`);
-                return;
-            }
+            if (!teams) return;
 
             const teamListId = (selectionType === 'firstTeam') ? 'first-team-list' : 'opponent-team-list';
             const teamList = document.getElementById(teamListId);
@@ -60,7 +59,6 @@ function fetchTeamsByLeague(leagueId, selectionType) {
                     if (selectionType === 'firstTeam') {
                         selectFirstTeam(team.TeamID, team.Name, leagueId);
                     } else {
-                        // When selecting an opponent manually, we don't have next match data
                         nextMatchDetails = null;
                         selectOpponentTeam(team.TeamID, team.Name, leagueId);
                     }
@@ -74,24 +72,29 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 
 
 // ==================================================================
-// STEP 2: Functions for Handling the User Workflow
+// User Workflow Functions
 // ==================================================================
 
 function selectFirstTeam(teamId, teamName, leagueId) {
     firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
+    
+    // **CORRECTED ANIMATION LOGIC**
+    // 1. Animate the main container upwards
+    document.getElementById('main-container').classList.add('content-moved-up');
+    
+    // 2. Show the details container (which is now inside the main container)
+    document.getElementById('first-team-details-container').classList.remove('d-none');
+    
+    // 3. Populate the details
     apiCall(`/api/team/${teamId}`, 'first-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'last10');
 
-    // Apply the transition to move step1 upward
-    document.getElementById('step1-choose-team').classList.add('moved-up');
-    
-    // Show opponent selection (centered)
-    const step2 = document.getElementById('step2-choose-opponent');
-    step2.classList.remove('d-none');
-    step2.classList.add('centered-opponent');
-    
-    // Hide step3 if it was previously shown
+    // 4. Show the opponent selection step
+    document.getElementById('step2-container').classList.remove('d-none');
+
+    // 5. Hide other sections until needed
+    document.getElementById('opponent-team-info-wrapper').classList.add('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
 
@@ -101,17 +104,13 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
     document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
     document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
     
-    // Move the opponent section up as well after selection
-    document.getElementById('step2-choose-opponent').classList.add('moved-up');
-    document.getElementById('step2-choose-opponent').classList.remove('centered-opponent');
-    
     apiCall(`/api/team/${teamId}`, 'opponent-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'opponent-last10');
 
-    displayMatchDetails(); // Show match details if available
+    displayMatchDetails();
 
     document.getElementById('start-simulation-btn').classList.remove('d-none');
-    document.getElementById('step3-simulation-result').classList.remove('d-none');
+    document.getElementById('step3-simulation-result').classList.add('d-none');
 }
 
 async function simulateNextOfficialMatch() {

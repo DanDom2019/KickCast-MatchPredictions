@@ -11,8 +11,6 @@ app = Flask(__name__)
 CORS(app)  # This allows all domains by default
 
 
-app = Flask(__name__, static_folder='.')
-
 # --- Frontend Routes ---
 
 @app.route('/')
