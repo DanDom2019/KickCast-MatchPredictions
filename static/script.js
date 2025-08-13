@@ -1,10 +1,8 @@
-
-
 // --- Global State Management ---
 let firstTeam = null;
 let opponentTeam = null;
-let nextMatchDetails = null;
-let predictionChart = null;
+let nextMatchDetails = null; 
+let predictionChart = null; 
 const API_BASE = 'http://127.0.0.1:5000';
 
 // ==================================================================
@@ -83,7 +81,7 @@ function selectFirstTeam(teamId, teamName, leagueId) {
     // 1. Animate the main container upwards
     document.getElementById('main-container').classList.add('content-moved-up');
     
-    // 2. Show the details container (which is now inside the main container)
+    // 2. Show the details container that holds the team info
     document.getElementById('first-team-details-container').classList.remove('d-none');
     
     // 3. Populate the details
@@ -119,29 +117,27 @@ async function simulateNextOfficialMatch() {
         return;
     }
     const endpoint = `/api/team/${firstTeam.id}/next_match`;
-    const resultDiv = document.getElementById('match-result-display');
-    resultDiv.innerHTML = 'Finding next official match...';
     
     try {
         const response = await fetch(API_BASE + endpoint);
         const matchData = await response.json();
 
         if (response.ok) {
-            nextMatchDetails = matchData; // Store the full details
+            nextMatchDetails = matchData;
             const opponent = matchData.awayTeam.id === firstTeam.id ? matchData.homeTeam : matchData.awayTeam;
             const opponentLeagueId = matchData.competition.id;
             selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
         } else {
-            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(matchData, null, 2) + '</pre>';
+            alert(`Error finding next match: ${matchData.error}`);
         }
     } catch (error) {
-        resultDiv.innerHTML = `<p class="text-danger">Network Error: ${error.message}</p>`;
+        alert(`Network Error: ${error.message}`);
     }
 }
 
 
 // ==================================================================
-// STEP 3: Display and Simulation Functions
+// Display and Simulation Functions
 // ==================================================================
 
 function displayTeamInfo(teamData, elementId) {
@@ -200,7 +196,6 @@ function displayPredictionResult(data, elementId) {
         return;
     }
 
-    // Build the list of top five scores
     let topScoresHtml = '';
     data.top_five_scores.forEach(item => {
         topScoresHtml += `
@@ -236,9 +231,7 @@ function displayPredictionResult(data, elementId) {
             </div>
             <div class="col-md-5">
                 <h5>Top 5 Scorelines</h5>
-                <ul class="list-group mb-3"> ${topScoresHtml}
-                </ul>
-
+                <ul class="list-group mb-3"> ${topScoresHtml} </ul>
                 <h5>Predicted Goals</h5>
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -250,7 +243,7 @@ function displayPredictionResult(data, elementId) {
                         <span class="badge bg-primary rounded-pill">${data.predicted_goals_away}</span>
                     </li>
                 </ul>
-                </div>
+            </div>
         </div>
     `;
     
@@ -272,14 +265,21 @@ function displayPredictionResult(data, elementId) {
         },
         options: {
             responsive: true,
-            plugins: { legend: { position: 'top' }, title: { display: true, text: 'Match Outcome Prediction' } }
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: '#e0e0e0' }
+                },
+                title: {
+                    display: true,
+                    text: 'Match Outcome Prediction',
+                    color: '#e0e0e0'
+                }
+            }
         }
     });
 }
     
-// **THE DUPLICATED CODE THAT WAS CAUSING THE ERROR HAS BEEN REMOVED FROM HERE**
-
-
 async function displayLast10Matches(teamId, leagueId, tableType) {
     const tableBody = document.getElementById(`${tableType}-table-body`);
     const loadingState = document.getElementById(`${tableType}-loading-state`);
