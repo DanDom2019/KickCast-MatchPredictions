@@ -1,8 +1,9 @@
+// --- Global State Management ---
 let firstTeam = null;
 let opponentTeam = null;
-let nextMatchDetails = null; 
-let predictionChart = null; 
-const API_BASE = 'http://127.0.0.1:5000';
+let nextMatchDetails = null; // Variable to hold upcoming match info
+let predictionChart = null; // Variable to hold our chart instance
+const API_BASE = 'http://127.0.0.1:5000'; // Your Flask server URL
 
 // ==================================================================
 //  Functions for Populating Dropdowns
@@ -39,7 +40,10 @@ function fetchTeamsByLeague(leagueId, selectionType) {
         .then(response => response.json())
         .then(allTeamsData => {
             const teams = allTeamsData[leagueId];
-            if (!teams) return;
+            if (!teams) {
+                console.error(`No teams found for league ID: ${leagueId}`);
+                return;
+            }
 
             const teamListId = (selectionType === 'firstTeam') ? 'first-team-list' : 'opponent-team-list';
             const teamList = document.getElementById(teamListId);
@@ -56,7 +60,8 @@ function fetchTeamsByLeague(leagueId, selectionType) {
                     if (selectionType === 'firstTeam') {
                         selectFirstTeam(team.TeamID, team.Name, leagueId);
                     } else {
-                        nextMatchDetails = null; 
+                        // When selecting an opponent manually, we don't have next match data
+                        nextMatchDetails = null;
                         selectOpponentTeam(team.TeamID, team.Name, leagueId);
                     }
                 };
@@ -75,23 +80,18 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 function selectFirstTeam(teamId, teamName, leagueId) {
     firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
-    
-
-    // 1. Trigger the upward animation
-    document.getElementById('main-container').classList.add('content-moved-up');
-    
-    // 2. Show the details container at the top
-    document.getElementById('first-team-details-container').classList.remove('d-none');
-    
-    // 3. Populate the details
     apiCall(`/api/team/${teamId}`, 'first-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'last10');
 
-    // 4. Show the opponent selection step
-    document.getElementById('step2-container').classList.remove('d-none');
-
-    // 5. Hide other sections
-    document.getElementById('opponent-team-info-wrapper').classList.add('d-none');
+    // Apply the transition to move step1 upward
+    document.getElementById('step1-choose-team').classList.add('moved-up');
+    
+    // Show opponent selection (centered)
+    const step2 = document.getElementById('step2-choose-opponent');
+    step2.classList.remove('d-none');
+    step2.classList.add('centered-opponent');
+    
+    // Hide step3 if it was previously shown
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
 
@@ -101,13 +101,17 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
     document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
     document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
     
+    // Move the opponent section up as well after selection
+    document.getElementById('step2-choose-opponent').classList.add('moved-up');
+    document.getElementById('step2-choose-opponent').classList.remove('centered-opponent');
+    
     apiCall(`/api/team/${teamId}`, 'opponent-team-info', displayTeamInfo);
     displayLast10Matches(teamId, leagueId, 'opponent-last10');
 
-    displayMatchDetails(); 
+    displayMatchDetails(); // Show match details if available
 
     document.getElementById('start-simulation-btn').classList.remove('d-none');
-    document.getElementById('step3-simulation-result').classList.add('d-none');
+    document.getElementById('step3-simulation-result').classList.remove('d-none');
 }
 
 async function simulateNextOfficialMatch() {
@@ -116,21 +120,23 @@ async function simulateNextOfficialMatch() {
         return;
     }
     const endpoint = `/api/team/${firstTeam.id}/next_match`;
+    const resultDiv = document.getElementById('match-result-display');
+    resultDiv.innerHTML = 'Finding next official match...';
     
     try {
         const response = await fetch(API_BASE + endpoint);
         const matchData = await response.json();
 
         if (response.ok) {
-            nextMatchDetails = matchData; 
+            nextMatchDetails = matchData; // Store the full details
             const opponent = matchData.awayTeam.id === firstTeam.id ? matchData.homeTeam : matchData.awayTeam;
             const opponentLeagueId = matchData.competition.id;
             selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
         } else {
-            alert(`Error finding next match: ${matchData.error}`);
+            resultDiv.innerHTML = '<h3>Error:</h3><pre>' + JSON.stringify(matchData, null, 2) + '</pre>';
         }
     } catch (error) {
-        alert(`Network Error: ${error.message}`);
+        resultDiv.innerHTML = `<p class="text-danger">Network Error: ${error.message}</p>`;
     }
 }
 
@@ -249,7 +255,6 @@ function displayPredictionResult(data, elementId) {
         </div>
     `;
     
-    // Create the chart (this part remains the same)
     const ctx = document.getElementById('predictionChart').getContext('2d');
     if (predictionChart) {
         predictionChart.destroy();
@@ -273,27 +278,7 @@ function displayPredictionResult(data, elementId) {
     });
 }
     
-    const ctx = document.getElementById('predictionChart').getContext('2d');
-    if (predictionChart) {
-        predictionChart.destroy();
-    }
-    predictionChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: [`${firstTeam.name} Win`, 'Draw', `${opponentTeam.name} Win`],
-            datasets: [{
-                label: 'Match Outcome Probability',
-                data: [data.home_team_win_probability, data.draw_probability, data.away_team_win_probability],
-                backgroundColor: ['rgba(75, 192, 192, 0.7)', 'rgba(255, 206, 86, 0.7)', 'rgba(255, 99, 132, 0.7)'],
-                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)', 'rgba(255, 99, 132, 1)'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'top' }, title: { display: true, text: 'Match Outcome Prediction' } }
-        }
-    });
+// **THE DUPLICATED CODE THAT WAS CAUSING THE ERROR HAS BEEN REMOVED FROM HERE**
 
 
 async function displayLast10Matches(teamId, leagueId, tableType) {
