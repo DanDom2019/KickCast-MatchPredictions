@@ -1,0 +1,177 @@
+:root {
+    --primary-bg-color: #1b1f23;
+    --secondary-bg-color: #23272e;
+    --primary-text-color: #5f86b9;
+    --secondary-text-color: #b2b7c2;
+    --accent-color: #4da3ff;
+    --accent-hover: #2b8eff;
+    --accent-active: #1f6fcd;
+    --accent-focus-ring: rgba(77,163,255,.35);
+    --border-color: #343a46;
+  
+    --success-color: #4ae28a;
+    --danger-color:  #ff4d6d;
+    --warning-color: #ffcc66;
+  
+    --surface-hover: rgba(255,255,255,0.03);
+    --surface-accent: rgba(177,78,255,0.08);
+  }
+  
+  /* Base */
+  body {
+    background-color: var(--primary-bg-color);
+    color: var(--primary-text-color);
+  }
+  
+  h1, h2, h3, h4, h5, h6 { color: var(--primary-text-color); }
+  .text-muted { color: var(--secondary-text-color) !important; }
+  hr { border-top: 1px solid var(--border-color); }
+  
+  /* Cards, menus */
+  .card,
+  .dropdown-menu {
+    background-color: var(--secondary-bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text-color);
+  }
+  
+  /* Dropdown items */
+  .dropdown-item {
+    color: var(--primary-text-color);
+  }
+  .dropdown-item:hover,
+  .dropdown-item:focus {
+    background-color: var(--surface-accent);
+    color: var(--primary-text-color);
+  }
+
+  /* Buttons – success styled like your accent */
+.btn-success {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
+  }
+  .btn-success:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #ffffff;
+  }
+  .btn-success:active,
+  .btn-success:focus,
+  .btn-success.show {
+    background-color: var(--accent-active) !important;
+    border-color: var(--accent-active) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.25rem var(--accent-focus-ring) !important;
+  }
+  
+/* Dark table theme */
+.table {
+    --bs-table-color: var(--primary-text-color);
+    --bs-table-bg: #151015; /* near black */
+    --bs-table-border-color: var(--border-color);
+    --bs-table-striped-bg: var(--surface-hover);
+    --bs-table-striped-color: var(--primary-text-color);
+    --bs-table-hover-bg: var(--surface-accent);
+    --bs-table-hover-color: var(--primary-text-color);
+    --bs-table-active-bg: var(--surface-accent);
+    --bs-table-active-color: var(--primary-text-color);
+    color: var(--primary-text-color);
+    border-color: var(--border-color);
+  }
+  .table thead th {
+    background-color: #1b1520; /* slightly lighter than body */
+    color: var(--primary-text-color);
+    border-bottom-color: var(--border-color);
+  }
+  .table tbody tr {
+    background-color: var(--bs-table-bg);
+  }
+  .table > :not(caption) > * > * {
+    background-color: inherit; /* ensure cells use dark bg */
+    border-color: var(--border-color);
+  }
+
+
+  /* Buttons – unified accent styling */
+  .btn-primary,
+  .btn-info {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
+  }
+  .btn-primary:hover,
+  .btn-info:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #ffffff;
+  }
+  .btn-primary:active,
+  .btn-info:active,
+  .btn-primary:focus,
+  .btn-info:focus,
+  .btn-primary.show,
+  .btn-info.show {
+    background-color: var(--accent-active) !important;
+    border-color: var(--accent-active) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.25rem var(--accent-focus-ring) !important;
+  }
+  
+  /* Secondary button matches dark surfaces */
+  .btn-secondary {
+    background-color: #3a333a;
+    border-color: var(--border-color);
+    color: var(--primary-text-color);
+  }
+  .btn-secondary:hover {
+    background-color: #443b45;
+    border-color: var(--border-color);
+    color: var(--primary-text-color);
+  }
+  .btn-secondary:focus,
+  .btn-secondary:active,
+  .btn-secondary.show {
+    background-color: #3a333a !important;
+    border-color: var(--border-color) !important;
+    color: var(--primary-text-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.08) !important;
+  }
+  
+  /* Inputs/selects */
+  .form-control,
+  .form-select {
+    background-color: var(--secondary-bg-color);
+    border-color: var(--border-color);
+    color: var(--primary-text-color);
+  }
+  .form-control:focus,
+  .form-select:focus {
+    background-color: var(--secondary-bg-color);
+    border-color: var(--accent-color);
+    color: var(--primary-text-color);
+    box-shadow: 0 0 0 0.25rem var(--accent-focus-ring);
+  }
+  
+  /* Badges using theme colors */
+  .badge.bg-success { background-color: var(--success-color) !important; color: #07130d !important; }
+  .badge.bg-danger  { background-color: var(--danger-color)  !important; color: #25060a !important; }
+  .badge.bg-warning { background-color: var(--warning-color) !important; color: #271b00 !important; }
+  
+  /* Links */
+  a { color: var(--accent-color); }
+  a:hover { color: var(--accent-hover); }
+
+.main-container {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.7s ease-in-out;
+}
+.content-moved-up {
+    transform: translateY(0);
+    justify-content: flex-start;
+    min-height: auto;
+}

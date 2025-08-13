@@ -5,24 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Football Simulation</title>
-    <style>
-        body {
-            overflow-x: hidden; 
-        }
-        .main-container {
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.7s ease-in-out;
-        }
-        .content-moved-up {
-            transform: translateY(0); /* Adjust to move it to the very top */
-            justify-content: flex-start; /* Align content to the top after moving */
-            min-height: auto; /* Reset min-height to allow natural flow */
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body class="container mt-4">
 
@@ -48,7 +31,7 @@
 
         <div id="details-container" class="container mt-4">
             <div id="first-team-details-container" class="d-none">
-                <div id="first-team-info" class="card card-body bg-light mb-3"></div>
+                <div id="first-team-info" class="card card-body mb-3"></div>
                 <div id="last10-wrapper" class="mt-3">
                     <h5 class="mb-2">Last 10 Matches</h5>
                     <table class="table table-striped table-hover table-sm">
@@ -67,7 +50,7 @@
                 <button class="btn btn-success me-3" onclick="simulateNextOfficialMatch()">Simulate Next Official Match</button>
                 <span class="mx-2">OR</span>
                 <div class="dropdown me-2">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('opponent')">
+                    <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="fetchLeagues('opponent')">
                       Select League
                     </button>
                     <ul class="dropdown-menu" id="opponent-league-list"></ul>
@@ -85,7 +68,7 @@
     <div id="results-container" class="container mt-4">
         <div id="opponent-team-info-wrapper" class="d-none">
             <hr>
-            <div id="opponent-team-info" class="card card-body bg-light mb-3"></div>
+            <div id="opponent-team-info" class="card card-body mb-3"></div>
             <div id="match-details-wrapper" class="card card-body bg-secondary text-white my-3 d-none">
                 <h5 class="card-title text-center">Match Details</h5>
                 <div id="match-details-content" class="text-center"></div>
@@ -111,5 +94,44 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
+
+
+    
+
+
+    <footer class="bg-dark text-center text-white">
+    <!-- Grid container -->
+    <div class="container p-4 pb-0">
+      <!-- Section: Social media -->
+      <section class="mb-4">
+  
+        <!-- Twitter -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-twitter"></i
+        ></a>
+  
+        <!-- Linkedin -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-linkedin-in"></i
+        ></a>
+  
+        <!-- Github -->
+        <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+          ><i class="fab fa-github"></i
+        ></a>
+      </section>
+      <!-- Section: Social media -->
+    </div>
+    <!-- Grid container -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+    
+
 </body>
 </html>
