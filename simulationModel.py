@@ -54,16 +54,16 @@ def predict_match(home_team_id, away_team_id, league_id):
     # Sort the score probabilities to find the top 5
     sorted_scores = sorted(score_probabilities.items(), key=lambda item: item[1], reverse=True)
     top_five_scores = [
-        {"score": score, "probability": round(prob * 100, 2)}
+        {"score": score, "probability": float(round(prob * 100, 2))}
         for score, prob in sorted_scores[:5]
     ]
 
     return {
-        "home_team_win_probability": round(home_win_prob * 100, 2),
-        "away_team_win_probability": round(away_win_prob * 100, 2),
-        "draw_probability": round(draw_prob * 100, 2),
-        "predicted_goals_home": round(lambda_home, 2),
-        "predicted_goals_away": round(lambda_away, 2),
+        "home_team_win_probability": float(round(home_win_prob * 100, 2)),
+        "away_team_win_probability": float(round(away_win_prob * 100, 2)),
+        "draw_probability": float(round(draw_prob * 100, 2)),
+        "predicted_goals_home": float(round(lambda_home, 2)),
+        "predicted_goals_away": float(round(lambda_away, 2)),
         "top_five_scores": top_five_scores  # New field with top 5 scores
     }
 

@@ -62,11 +62,14 @@ def process_last_X_games(leagueId, teamId, season=None,matches=None, X=10):
 
 
 
-def fetch_data(filename="foundationData/2024Season/epl_2024_stats.json"):
+def fetch_data(filename="/static/foundationData/2024Season/epl_2024_stats.json"):
     """Load data from the mockApi.json file"""
     try:
-        # Correctly locate mockApi.json in the same directory as this script
-        json_file_path = os.path.join(os.path.dirname(__file__), f'{filename}')
+        # Remove the leading slash to make it a relative path
+        if filename.startswith('/'):
+            filename = filename[1:]
+        # Correctly locate the file relative to the current script
+        json_file_path = os.path.join(os.path.dirname(__file__), filename)
         with open(json_file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except FileNotFoundError:
@@ -119,7 +122,7 @@ def calculate_final_team_stats(current_season,leagueId,team_id,league_averages):
     enough_matches=8
     
     if len(team_matches)==0:
-            prev_averages=fetch_data(filename="foundationData/2024Season/epl_2024_stats.json")
+            prev_averages=fetch_data(filename="/static/foundationData/2024Season/epl_2024_stats.json")
             team_stats= prev_averages['teams'][str(team_id)]
             return {
             "attack_strength_home": team_stats['attack_strength_home'],
@@ -130,7 +133,7 @@ def calculate_final_team_stats(current_season,leagueId,team_id,league_averages):
     #process the simulation data
     if 0<len(team_matches) <enough_matches:
         weight_prev, weight_curr = get_season_weights(len(team_matches), transition_period=enough_matches)
-        previous__season_data=fetch_data(filename="foundationData/2024Season/epl_2024_stats.json")
+        previous__season_data=fetch_data(filename="/static/foundationData/2024Season/epl_2024_stats.json")
         prev_averages=previous__season_data['teams'][str(team_id)]
         curr_averages= calculate_current_season_averages(team_id, team_matches)
         

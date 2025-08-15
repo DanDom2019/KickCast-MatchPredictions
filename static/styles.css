@@ -137,6 +137,11 @@
     color: var(--primary-text-color) !important;
     box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.08) !important;
   }
+  .match-details-wrapper{
+    background-color: var(--accent-active);
+    border: 1px solid var(--border-color);
+    color: var(--accent-active);
+  }
   
   /* Inputs/selects */
   .form-control,
@@ -157,6 +162,13 @@
   .badge.bg-success { background-color: var(--success-color) !important; color: #07130d !important; }
   .badge.bg-danger  { background-color: var(--danger-color)  !important; color: #25060a !important; }
   .badge.bg-warning { background-color: var(--warning-color) !important; color: #271b00 !important; }
+  
+  /* Fixed width for result badges to ensure consistent sizing */
+  .badge.bg-success, .badge.bg-danger, .badge.bg-warning {
+    min-width: 60px;
+    text-align: center;
+    display: inline-block;
+  }
   
   /* Links */
   a { color: var(--accent-color); }
