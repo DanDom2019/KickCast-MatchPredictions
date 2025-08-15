@@ -1,6 +1,8 @@
 // --- Global State Management ---
 let firstTeam = null;
+let firstTeamData = null; // Store first team's full data
 let opponentTeam = null;
+let opponentTeamData = null; // Store opponent team's full data
 let nextMatchDetails = null; 
 let predictionChart = null; 
 const API_BASE = 'http://127.0.0.1:5000';
@@ -74,6 +76,11 @@ function fetchTeamsByLeague(leagueId, selectionType) {
 // ==================================================================
 
 function selectFirstTeam(teamId, teamName, leagueId) {
+    // Clear any previous opponent data when selecting a new first team
+    opponentTeam = null;
+    opponentTeamData = null;
+    nextMatchDetails = null;
+    
     firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
     document.getElementById('first-team-dropdown-btn').textContent = teamName;
     
@@ -84,8 +91,11 @@ function selectFirstTeam(teamId, teamName, leagueId) {
     // 2. Show the details container that holds the team info
     document.getElementById('first-team-details-container').classList.remove('d-none');
     
-    // 3. Populate the details
-    apiCall(`/api/team/${teamId}`, 'first-team-info', displayTeamInfo);
+    // 3. Populate the details and store the data
+    apiCall(`/api/team/${teamId}`, 'first-team-info', (data, elementId) => {
+        displayTeamInfo(data, elementId);
+        firstTeamData = data; // Store the team data for later use
+    });
     displayLast10Matches(teamId, leagueId, 'last10');
 
     // 4. Show the opponent selection step
@@ -102,11 +112,10 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
     document.getElementById('opponent-team-dropdown-btn').textContent = teamName;
     document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
     
-    apiCall(`/api/team/${teamId}`, 'opponent-team-info', displayTeamInfo);
+    // Fetch opponent team data directly and then display match-up
+    fetchOpponentTeamData(teamId);
+    
     displayLast10Matches(teamId, leagueId, 'opponent-last10');
-
-    displayMatchDetails();
-
     document.getElementById('start-simulation-btn').classList.remove('d-none');
     document.getElementById('step3-simulation-result').classList.add('d-none');
 }
@@ -126,13 +135,117 @@ async function simulateNextOfficialMatch() {
             nextMatchDetails = matchData;
             const opponent = matchData.awayTeam.id === firstTeam.id ? matchData.homeTeam : matchData.awayTeam;
             const opponentLeagueId = matchData.competition.id;
-            selectOpponentTeam(opponent.id, opponent.name, opponentLeagueId);
+            
+            // Set opponent team info and fetch their data
+            opponentTeam = { id: opponent.id, name: opponent.name, leagueId: opponentLeagueId };
+            document.getElementById('opponent-team-dropdown-btn').textContent = opponent.name;
+            document.getElementById('opponent-team-info-wrapper').classList.remove('d-none');
+            
+            // Fetch opponent team data and then display match-up
+            fetchOpponentTeamData(opponent.id);
+            
+            displayLast10Matches(opponent.id, opponentLeagueId, 'opponent-last10');
+            document.getElementById('start-simulation-btn').classList.remove('d-none');
+            document.getElementById('step3-simulation-result').classList.add('d-none');
         } else {
             alert(`Error finding next match: ${matchData.error}`);
         }
     } catch (error) {
         alert(`Network Error: ${error.message}`);
     }
+}
+
+async function fetchOpponentTeamData(teamId) {
+    try {
+        const response = await fetch(API_BASE + `/api/team/${teamId}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+            opponentTeamData = data; // Store the opponent team data
+            displayMatchUp(); // Now display the match-up with stored data
+        } else {
+            const container = document.getElementById('opponent-team-info');
+            container.innerHTML = `<p class="text-danger">Could not load opponent team information: ${data.error || 'Unknown error'}</p>`;
+        }
+    } catch (error) {
+        const container = document.getElementById('opponent-team-info');
+        container.innerHTML = `<p class="text-danger">Network Error: ${error.message}</p>`;
+    }
+}
+
+function displayMatchUp() {
+    const container = document.getElementById('opponent-team-info');
+    
+    // Check if we have the required team data
+    if (!firstTeamData || !opponentTeamData) {
+        container.innerHTML = `<p class="text-danger">Team data not available. Please try again.</p>`;
+        return;
+    }
+    
+    // Determine home and away teams
+    let homeTeamData, awayTeamData;
+    
+    if (nextMatchDetails) {
+        // If we have official match details, use the actual home/away designation
+        if (nextMatchDetails.homeTeam.id === firstTeam.id) {
+            homeTeamData = firstTeamData;
+            awayTeamData = opponentTeamData;
+        } else {
+            homeTeamData = opponentTeamData;
+            awayTeamData = firstTeamData;
+        }
+    } else {
+        // For manual selection, first team is on the left, opponent on the right
+        homeTeamData = firstTeamData;
+        awayTeamData = opponentTeamData;
+    }
+    
+    const matchUpHtml = `
+        <div class="row align-items-center">
+            <!-- Home Team (Left) -->
+            <div class="col-md-4 text-center">
+                <div class="team-card">
+                    <img src="${homeTeamData.crest}" alt="${homeTeamData.name} logo" class="team-logo mb-2" style="width: 80px; height: 80px;">
+                    <h5 class="mb-1">${homeTeamData.name}</h5>
+                    <img src="${homeTeamData.area.flag}" alt="${homeTeamData.area.name} flag" style="width: 30px; height: auto; margin-bottom: 8px;">
+                    <p class="mb-1 text-muted small"><strong>Venue:</strong> ${homeTeamData.venue}</p>
+                    <p class="mb-0 text-muted small"><strong>Founded:</strong> ${homeTeamData.founded || 'N/A'}</p>
+                </div>
+            </div>
+            
+            <!-- Match Details (Center) -->
+            <div class="col-md-4 text-center">
+                <div class="match-details">
+                    <h4 class="mb-3">VS</h4>
+                    ${nextMatchDetails ? `
+                        <div class="match-info">
+                            <p class="mb-1"><strong>Date & Time:</strong></p>
+                            <p class="mb-2">${new Date(nextMatchDetails.utcDate).toLocaleString()}</p>
+                            <p class="mb-1"><strong>Venue:</strong></p>
+                            <p class="mb-0">${nextMatchDetails.venue}</p>
+                        </div>
+                    ` : `
+                        <div class="match-info">
+                            <p class="mb-0 text-muted">Match details will be available when scheduled</p>
+                        </div>
+                    `}
+                </div>
+            </div>
+            
+            <!-- Away Team (Right) -->
+            <div class="col-md-4 text-center">
+                <div class="team-card">
+                    <img src="${awayTeamData.crest}" alt="${awayTeamData.name} logo" class="team-logo mb-2" style="width: 80px; height: 80px;">
+                    <h5 class="mb-1">${awayTeamData.name}</h5>
+                    <img src="${awayTeamData.area.flag}" alt="${awayTeamData.area.name} flag" style="width: 30px; height: auto; margin-bottom: 8px;">
+                    <p class="mb-1 text-muted small"><strong>Venue:</strong> ${awayTeamData.venue}</p>
+                    <p class="mb-0 text-muted small"><strong>Founded:</strong> ${awayTeamData.founded || 'N/A'}</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = matchUpHtml;
 }
 
 
@@ -161,23 +274,7 @@ function displayTeamInfo(teamData, elementId) {
     container.innerHTML = teamCardHtml;
 }
 
-function displayMatchDetails() {
-    const detailsWrapper = document.getElementById('match-details-wrapper');
-    const detailsContent = document.getElementById('match-details-content');
-
-    if (nextMatchDetails) {
-        const matchDate = new Date(nextMatchDetails.utcDate);
-        const formattedDate = matchDate.toLocaleString();
-
-        detailsContent.innerHTML = `
-            <p class="mb-1"><strong>Date & Time:</strong> ${formattedDate}</p>
-            <p class="mb-0"><strong>Venue:</strong> ${nextMatchDetails.venue}</p>
-        `;
-        detailsWrapper.classList.remove('d-none');
-    } else {
-        detailsWrapper.classList.add('d-none');
-    }
-}
+// displayMatchDetails function removed - match details are now integrated into displayMatchUp
 
 function runSimulation() {
     if (!firstTeam || !opponentTeam) {

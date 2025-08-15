@@ -139,8 +139,43 @@
   }
   .match-details-wrapper{
     background-color: var(--accent-active);
-    border: 1px solid var(--border-color);
     color: var(--accent-active);
+  }
+  
+  /* Match-up styling */
+  .team-card {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--surface-hover);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+  }
+  
+  .team-card:hover {
+    background-color: var(--surface-accent);
+    transform: translateY(-2px);
+  }
+  
+  .match-details {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: var(--surface-accent);
+    border: 2px solid var(--border-color);
+  }
+  
+  .match-details h4 {
+    color: var(--accent-color);
+    font-weight: bold;
+    font-size: 2rem;
+  }
+  
+  .match-info {
+    font-size: 0.9rem;
+  }
+  
+  .team-logo {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   
   /* Inputs/selects */
