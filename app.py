@@ -8,7 +8,7 @@ from simulationModel import predict_match
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # This allows all domains by default
+CORS(app, origins='*')
 
 
 # --- Frontend Routes ---
