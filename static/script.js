@@ -5,14 +5,19 @@ let opponentTeam = null;
 let opponentTeamData = null; // Store opponent team's full data
 let nextMatchDetails = null; 
 let predictionChart = null; 
-const API_BASE = 'http://127.0.0.1:5000';
+// Detect if we're running locally or deployed
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocal ? 'http://127.0.0.1:5000' : 'https://kickcast-backend.onrender.com'; // Update this with your actual backend URL
+
+// For GitHub Pages deployment, we'll use static data as fallback
+const USE_STATIC_DATA = !isLocal;
 
 // ==================================================================
 //  Functions for Populating Dropdowns
 // ==================================================================
 
 function fetchLeagues(selectionType) {
-    fetch('/static/foundationData/leagues.json')
+    fetch('./static/foundationData/leagues.json')
         .then(response => response.json())
         .then(leagues => {
             const leagueListId = (selectionType === 'firstTeam') ? 'first-team-league-list' : 'opponent-league-list';
@@ -38,7 +43,7 @@ function fetchLeagues(selectionType) {
 }
 
 function fetchTeamsByLeague(leagueId, selectionType) {
-    fetch('/static/foundationData/mainLeaguesTeams.json')
+    fetch('./static/foundationData/mainLeaguesTeams.json')
         .then(response => response.json())
         .then(allTeamsData => {
             const teams = allTeamsData[leagueId];
