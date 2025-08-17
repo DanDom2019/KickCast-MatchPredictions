@@ -5,11 +5,16 @@ from prosessData import process_last_X_games
 from fetchData import load_team_data, load_team_match_upcoming_match
 # Import your new prediction function
 from simulationModel import predict_match
-from flask_cors import CORS
+
 
 app = Flask(__name__)
-CORS(app, origins='*')
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
+    return response
 
 # --- Frontend Routes ---
 
