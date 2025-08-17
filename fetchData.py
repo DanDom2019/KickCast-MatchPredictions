@@ -1,7 +1,8 @@
 import requests
+import os
 
-API_TOKEN = "5d5cbeda806945ef9b31088d6bce37e3"
-BASE_URL   = "https://api.football-data.org/v4"
+API_TOKEN = os.environ.get('FOOTBALL_API_TOKEN', "5d5cbeda806945ef9b31088d6bce37e3")
+BASE_URL = "https://api.football-data.org/v4"
 
 
 def fetch(path, params=None):
