@@ -45,7 +45,28 @@ def add_cors_headers(response):
     response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,OPTIONS'
     return response
 
-# --- Test Routes for Debugging ---
+# --- Frontend Route ---
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
+# --- API Info Route ---
+@app.route('/api')
+def api_info():
+    return jsonify({
+        "app": "KickCast Match Predictions",
+        "status": "running",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "test": "/test",
+            "team_info": "/api/team/{teamId}",
+            "last_matches": "/app/team/{teamId}/last10matches?leagueId={leagueId}",
+            "next_match": "/api/team/{teamId}/next_match",
+            "prediction": "/simulation/predict?home={homeId}&away={awayId}&leagueId={leagueId}"
+        }
+    })
+
 @app.route('/test')
 def test():
     return jsonify({
@@ -58,17 +79,7 @@ def test():
 def health():
     return jsonify({"status": "healthy"})
 
-# --- Frontend Routes ---
 
-@app.route('/')
-def serve_index():
-    """Serves the main index.html page."""
-    return send_from_directory('.', 'index.html')
-
-@app.route('/<path:path>')
-def serve_static_files(path):
-    """Serves any other file requested by the frontend."""
-    return send_from_directory('.', path)
 
 # --- API Routes ---
 
