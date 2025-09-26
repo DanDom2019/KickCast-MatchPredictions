@@ -10,3 +10,5 @@ flask-cors>=4.0.0
 # Data processing
 pandas>=2.0.0
 scipy>=1.10.0
+
+gunicorn

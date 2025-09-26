@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, send_from_directory, request
 import json
 import os
+from datetime import datetime
 from prosessData import process_last_X_games
 from fetchData import load_team_data, load_team_match_upcoming_match
 # Import your new prediction function
@@ -8,6 +9,26 @@ from simulationModel import predict_match
 from flask_cors import CORS
 
 app = Flask(__name__)
+
+def get_current_season():
+    """
+    Determines the current football season based on the current date.
+    Season starts on August 1st of each year.
+    
+    Examples:
+    - If today is July 15, 2025 -> returns 2024 (previous season)
+    - If today is August 15, 2025 -> returns 2025 (current season)
+    - If today is March 10, 2025 -> returns 2024 (current season)
+    """
+    now = datetime.now()
+    current_year = now.year
+    current_month = now.month
+    
+    # If we're before August, we're still in the previous season
+    if current_month < 8:
+        return current_year - 1
+    else:
+        return current_year
 
 # Enhanced CORS configuration
 CORS(app, 
@@ -67,7 +88,7 @@ def get_team_by_id(teamId):
 def get_last_10_matches(teamId):
     """Get the last 10 processed matches for a given team."""
     leagueId = request.args.get('leagueId', type=int)
-    season = 2024
+    season = get_current_season()  # Dynamically determine current season
     if not leagueId:
         return jsonify({"error": "leagueId is required"}), 400
     try:
