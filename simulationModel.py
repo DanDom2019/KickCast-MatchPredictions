@@ -70,7 +70,14 @@ def predict_match(home_team_id, away_team_id, league_id):
         "draw_probability": float(round(draw_prob * 100, 2)),
         "predicted_goals_home": float(round(lambda_home, 2)),
         "predicted_goals_away": float(round(lambda_away, 2)),
-        "top_five_scores": top_five_scores  # New field with top 5 scores
+        "top_five_scores": top_five_scores,  # New field with top 5 scores
+        "league_averages": league_averages,
+        "home_team_stats": home_team_stats,
+        "away_team_stats": away_team_stats,
+        "home_expected_goals": lambda_home,
+        "away_expected_goals": lambda_away,
+
+
     }
 
 # Example of how to run it directly
