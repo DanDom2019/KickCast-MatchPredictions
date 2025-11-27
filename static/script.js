@@ -13,48 +13,32 @@ const API_BASE = isLocal
   ? "http://127.0.0.1:5000"
   : "https://kickcast-predictions.ts.r.appspot.com"; // Updated to Google App Engine URL
 
-// For GitHub Pages deployment, we'll use static data as fallback
 const USE_STATIC_DATA = !isLocal;
+
+// --- League Configuration ---
+// Change this constant to switch between leagues (2021 = Premier League)
+const CURRENT_LEAGUE_ID = 2021;
 
 // ==================================================================
 //  Functions for Populating Dropdowns
 // ==================================================================
 
-function fetchLeagues(selectionType) {
-  fetch("./static/foundationData/leagues.json")
-    .then((response) => response.json())
-    .then((leagues) => {
-      const leagueListId =
-        selectionType === "firstTeam"
-          ? "first-team-league-list"
-          : "opponent-league-list";
-      const leagueList = document.getElementById(leagueListId);
-      leagueList.innerHTML = "";
-
-      leagues.forEach((league) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.className = "dropdown-item";
-        a.href = "#";
-        a.textContent = league.Name;
-        a.onclick = (event) => {
-          event.preventDefault();
-          leagueList.previousElementSibling.textContent = league.Name;
-          fetchTeamsByLeague(league.LeagueID, selectionType);
-        };
-        li.appendChild(a);
-        leagueList.appendChild(li);
-      });
-    })
-    .catch((error) => console.error("Error fetching leagues:", error));
-}
-
-function fetchTeamsByLeague(leagueId, selectionType) {
+/**
+ * Loads teams for a given league ID and populates the appropriate dropdown
+ * @param {number|string} leagueId - The league ID to load teams for
+ * @param {string} selectionType - Either "firstTeam" or "opponent"
+ */
+function loadLeagueTeams(leagueId, selectionType) {
   fetch("./static/foundationData/mainLeaguesTeams.json")
     .then((response) => response.json())
     .then((allTeamsData) => {
-      const teams = allTeamsData[leagueId];
-      if (!teams) return;
+      // Convert leagueId to string for JSON key lookup
+      const leagueKey = String(leagueId);
+      const teams = allTeamsData[leagueKey];
+      if (!teams) {
+        console.error(`No teams found for league ID: ${leagueId}`);
+        return;
+      }
 
       const teamListId =
         selectionType === "firstTeam"
@@ -95,7 +79,10 @@ function selectFirstTeam(teamId, teamName, leagueId) {
   opponentTeamData = null;
   nextMatchDetails = null;
 
-  firstTeam = { id: teamId, name: teamName, leagueId: leagueId };
+  // Use CURRENT_LEAGUE_ID if leagueId is not provided
+  const effectiveLeagueId = leagueId || CURRENT_LEAGUE_ID;
+  
+  firstTeam = { id: teamId, name: teamName, leagueId: effectiveLeagueId };
   document.getElementById("first-team-dropdown-btn").textContent = teamName;
 
   // **CORRECTED ANIMATION LOGIC**
@@ -112,10 +99,12 @@ function selectFirstTeam(teamId, teamName, leagueId) {
     displayTeamInfo(data, elementId);
     firstTeamData = data; // Store the team data for later use
   });
-  displayLast10Matches(teamId, leagueId, "last10");
+  displayLast10Matches(teamId, effectiveLeagueId, "last10");
 
-  // 4. Show the opponent selection step
+  // 4. Show the opponent selection step and load opponent teams
   document.getElementById("step2-container").classList.remove("d-none");
+  // Load opponent teams when step 2 is shown
+  loadLeagueTeams(CURRENT_LEAGUE_ID, "opponent");
 
   // 5. Hide other sections until needed
   document.getElementById("opponent-team-info-wrapper").classList.add("d-none");
@@ -123,7 +112,10 @@ function selectFirstTeam(teamId, teamName, leagueId) {
 }
 
 function selectOpponentTeam(teamId, teamName, leagueId) {
-  opponentTeam = { id: teamId, name: teamName, leagueId: leagueId };
+  // Use CURRENT_LEAGUE_ID if leagueId is not provided
+  const effectiveLeagueId = leagueId || CURRENT_LEAGUE_ID;
+  
+  opponentTeam = { id: teamId, name: teamName, leagueId: effectiveLeagueId };
 
   document.getElementById("opponent-team-dropdown-btn").textContent = teamName;
   document
@@ -133,7 +125,7 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
   // Fetch opponent team data directly and then display match-up
   fetchOpponentTeamData(teamId);
 
-  displayLast10Matches(teamId, leagueId, "opponent-last10");
+  displayLast10Matches(teamId, effectiveLeagueId, "opponent-last10");
   document.getElementById("start-simulation-btn").classList.remove("d-none");
   document.getElementById("step3-simulation-result").classList.add("d-none");
 }
@@ -535,3 +527,12 @@ async function apiCall(endpoint, resultId, displayFunction) {
     resultDiv.innerHTML = `<p class="text-danger">Network or Server Error: ${error.message}</p>`;
   }
 }
+
+// ==================================================================
+//  Initialize on Page Load
+// ==================================================================
+
+// Load teams when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+  loadLeagueTeams(CURRENT_LEAGUE_ID, "firstTeam");
+});

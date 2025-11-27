@@ -116,8 +116,12 @@ def calculate_current_season_averages(team_id, current_matches):
 
 
 #main function to simulate the match
-def calculate_final_team_stats(current_season,leagueId,team_id,league_averages):
-    team_matches= retrieve_matches_for_team(leagueId, current_season, team_id,numsMatches=None,noMatch=True) or []
+def calculate_final_team_stats(current_season,leagueId,team_id,league_averages, team_matches=None):
+    # If team_matches is provided, use it (optimization to avoid redundant API calls)
+    # Otherwise, fetch it (for backward compatibility)
+    if team_matches is None:
+        team_matches = retrieve_matches_for_team(leagueId, current_season, team_id,numsMatches=None,noMatch=True) or []
+    
     #determine if we need last season data since the current season is not sufficient
     enough_matches=8
     

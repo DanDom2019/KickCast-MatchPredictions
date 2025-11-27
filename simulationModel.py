@@ -2,7 +2,7 @@ from scipy.stats import poisson
 import json
 import os
 from prosessData import calculate_final_team_stats 
-from fetchData import retrieve_matches_for_team, calculate_league_averages
+from fetchData import retrieve_matches_for_team, calculate_league_averages, filter_matches_by_team_id
 
 def predict_match(home_team_id, away_team_id, league_id):
     """
@@ -17,16 +17,22 @@ def predict_match(home_team_id, away_team_id, league_id):
     print("running")
     current_season = 2025 # This can be updated as new seasons begin
 
-    # 1. Calculate current league-wide goal averages
+    # 1. Fetch ALL league matches ONCE (this is the only API call needed!)
     all_matches_current_season = retrieve_matches_for_team(league_id, current_season, team_id=None) or []
     if not all_matches_current_season:
         return {"error": f"No match data found for the league in season {current_season} to calculate averages."}
     
+    # 2. Calculate league averages from the fetched data
     league_averages = calculate_league_averages(all_matches_current_season)
     print("got league averages")
-    # 2. Calculate dynamic stats for both teams
-    home_team_stats = calculate_final_team_stats(current_season, league_id, home_team_id, league_averages)
-    away_team_stats = calculate_final_team_stats(current_season, league_id, away_team_id, league_averages)
+    
+    # 3. Filter matches for each team from the already-fetched data (no additional API calls!)
+    home_team_matches = filter_matches_by_team_id(home_team_id, all_matches_current_season)
+    away_team_matches = filter_matches_by_team_id(away_team_id, all_matches_current_season)
+    
+    # 4. Calculate dynamic stats for both teams using the filtered data
+    home_team_stats = calculate_final_team_stats(current_season, league_id, home_team_id, league_averages, team_matches=home_team_matches)
+    away_team_stats = calculate_final_team_stats(current_season, league_id, away_team_id, league_averages, team_matches=away_team_matches)
     print("successfully calculated team stats")
     # 3. Calculate expected goals (lambda) using dynamic strengths
     lambda_home = (home_team_stats['attack_strength_home'] * away_team_stats['defense_strength_away'] * league_averages['avg_home_goals'])
