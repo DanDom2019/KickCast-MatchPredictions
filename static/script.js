@@ -346,114 +346,189 @@ function runSimulation() {
   document.getElementById("step3-simulation-result").classList.remove("d-none");
   apiCall(endpoint, "match-result-display", displayPredictionResult);
 }
-
 function displayPredictionResult(data, elementId) {
   const container = document.getElementById(elementId);
   if (!data || data.error) {
-    container.innerHTML = `<p class="text-danger">Failed to get a valid simulation result: ${
+      container.innerHTML = `<p class="text-danger">Failed to get a valid simulation result: ${
       data.error || "Unknown error"
     }</p>`;
-    return;
+      return;
   }
 
+  // 1. Format Top 5 Scores
   let topScoresHtml = "";
-  data.top_five_scores.forEach((item) => {
-    topScoresHtml += `
+  if (data.top_five_scores && Array.isArray(data.top_five_scores)) {
+    data.top_five_scores.forEach((item) => {
+        topScoresHtml += `
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Score: <strong>${item.score}</strong>
                 <span class="badge bg-info rounded-pill">${item.probability}%</span>
             </li>
         `;
-  });
+    });
+  }
+
+  // 2. Format Team Stats (Attack / Defense) with safe access
+  // Check if data exists before accessing properties
+  const homeStats = data.home_team_stats || {};
+  const awayStats = data.away_team_stats || {};
+  const leagueAvgs = data.league_averages || {};
+
+  // Get numeric values first (for calculations), then format for display
+  const homeAttackNum = parseFloat(homeStats.attack_strength_home) || 0;
+  const homeDefNum = parseFloat(homeStats.defense_strength_home) || 0;
+  const awayAttackNum = parseFloat(awayStats.attack_strength_away) || 0;
+  const awayDefNum = parseFloat(awayStats.defense_strength_away) || 0;
+
+  // Format for display (2 decimal places)
+  const homeAttack = homeAttackNum.toFixed(2);
+  const homeDef = homeDefNum.toFixed(2);
+  const awayAttack = awayAttackNum.toFixed(2);
+  const awayDef = awayDefNum.toFixed(2);
+
+  // 3. Format League Averages with safe access
+  const leagueHomeNum = parseFloat(leagueAvgs.avg_home_goals) || 0;
+  const leagueAwayNum = parseFloat(leagueAvgs.avg_away_goals) || 0;
+  const leagueHome = leagueHomeNum.toFixed(2);
+  const leagueAway = leagueAwayNum.toFixed(2);
+
+  // 4. Format predicted goals with safe access
+  const predictedGoalsHome = (data.predicted_goals_home !== undefined && data.predicted_goals_home !== null)
+    ? parseFloat(data.predicted_goals_home).toFixed(2)
+    : "0.00";
+  const predictedGoalsAway = (data.predicted_goals_away !== undefined && data.predicted_goals_away !== null)
+    ? parseFloat(data.predicted_goals_away).toFixed(2)
+    : "0.00";
 
   container.innerHTML = `
-        <div class="row align-items-center">
-            <div class="col-md-5 text-center">
-                <h5>${firstTeam.name}</h5>
-                <h1 class="display-4">${data.home_team_win_probability}%</h1>
-                <p class="text-muted">Win Probability</p>
-            </div>
-            <div class="col-md-2 text-center">
-                <h5 class="text-muted">Draw</h5>
-                <h1 class="display-4">${data.draw_probability}%</h1>
-            </div>
-            <div class="col-md-5 text-center">
-                <h5>${opponentTeam.name}</h5>
-                <h1 class="display-4">${data.away_team_win_probability}%</h1>
-                <p class="text-muted">Win Probability</p>
-            </div>
-        </div>
-        <hr>
-        <div class="row mt-3">
-            <div class="col-md-7">
-                <h5>Outcome Probabilities</h5>
-                <canvas id="predictionChart"></canvas>
-            </div>
-            <div class="col-md-5">
-                <h5>Top 5 Scorelines</h5>
-                <ul class="list-group mb-3"> ${topScoresHtml} </ul>
-                <h5>Predicted Goals</h5>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ${firstTeam.name}:
-                        <span class="badge bg-primary rounded-pill">${data.predicted_goals_home}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ${opponentTeam.name}:
-                        <span class="badge bg-primary rounded-pill">${data.predicted_goals_away}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    `;
+      <div class="row align-items-center mb-4">
+          <div class="col-md-5 text-center">
+              <h5>${firstTeam.name}</h5>
+              <h1 class="display-4 text-success">${data.home_team_win_probability}%</h1>
+              <p class="text-muted">Win Probability</p>
+          </div>
+          <div class="col-md-2 text-center">
+              <h5 class="text-muted">Draw</h5>
+              <h2 class="display-5">${data.draw_probability}%</h2>
+          </div>
+          <div class="col-md-5 text-center">
+              <h5>${opponentTeam.name}</h5>
+              <h1 class="display-4 text-danger">${data.away_team_win_probability}%</h1>
+              <p class="text-muted">Win Probability</p>
+          </div>
+      </div>
 
+      <div class="card mb-4 bg-light border-0">
+          <div class="card-body">
+              <div class="row text-center">
+                  <div class="col-md-4">
+                      <h6 class="text-muted">Attack Strength</h6>
+                      <div class="d-flex justify-content-around align-items-center">
+                          <div><strong>${homeAttack}</strong></div>
+                          <small class="text-muted">vs League Avg (1.0)</small>
+                          <div><strong>${awayAttack}</strong></div>
+                      </div>
+                      <div class="progress mt-2" style="height: 6px;">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: ${Math.min(homeAttackNum * 50, 100)}%"></div>
+                          <div class="progress-bar bg-danger" role="progressbar" style="width: ${Math.min(awayAttackNum * 50, 100)}%"></div>
+                      </div>
+                  </div>
+
+                  <div class="col-md-4 border-start border-end">
+                      <h6 class="text-muted">League Averages</h6>
+                      <p class="mb-1 small">Avg Home Goals: <strong>${leagueHome}</strong></p>
+                      <p class="mb-0 small">Avg Away Goals: <strong>${leagueAway}</strong></p>
+                  </div>
+
+                  <div class="col-md-4">
+                      <h6 class="text-muted">Defense Strength</h6>
+                       <div class="d-flex justify-content-around align-items-center">
+                          <div><strong>${homeDef}</strong></div>
+                          <small class="text-muted">(Lower is better)</small>
+                          <div><strong>${awayDef}</strong></div>
+                      </div>
+                       <div class="progress mt-2" style="height: 6px;">
+                          <div class="progress-bar bg-primary" role="progressbar" style="width: ${Math.min(homeDefNum * 50, 100)}%"></div>
+                          <div class="progress-bar bg-warning" role="progressbar" style="width: ${Math.min(awayDefNum * 50, 100)}%"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <hr>
+
+      <div class="row mt-3">
+          <div class="col-md-7">
+              <h5>Outcome Visualization</h5>
+              <canvas id="predictionChart"></canvas>
+          </div>
+          <div class="col-md-5">
+              <h5>Most Likely Scorelines</h5>
+              <ul class="list-group mb-3"> ${topScoresHtml} </ul>
+              
+              <h5>Expected Goals (xG)</h5>
+              <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                      ${firstTeam.name}:
+                      <span class="badge bg-primary rounded-pill">${predictedGoalsHome}</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                      ${opponentTeam.name}:
+                      <span class="badge bg-primary rounded-pill">${predictedGoalsAway}</span>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  `;
+
+  // Render the Chart
   const ctx = document.getElementById("predictionChart").getContext("2d");
   if (predictionChart) {
-    predictionChart.destroy();
+      predictionChart.destroy();
   }
   predictionChart = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: [`${firstTeam.name} Win`, "Draw", `${opponentTeam.name} Win`],
-      datasets: [
-        {
-          label: "Match Outcome Probability",
-          data: [
-            data.home_team_win_probability,
-            data.draw_probability,
-            data.away_team_win_probability,
-          ],
-          backgroundColor: [
-            "rgba(75, 192, 192, 0.7)",
-            "rgba(255, 206, 86, 0.7)",
-            "rgba(255, 99, 132, 0.7)",
-          ],
-          borderColor: [
-            "rgba(75, 192, 192, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(255, 99, 132, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "top",
-          labels: { color: "#e0e0e0" },
-        },
-        title: {
-          display: true,
-          text: "Match Outcome Prediction",
-          color: "#e0e0e0",
-        },
+      type: "doughnut",
+      data: {
+          labels: [`${firstTeam.name} Win`, "Draw", `${opponentTeam.name} Win`],
+          datasets: [{
+              label: "Match Outcome Probability",
+              data: [
+                  data.home_team_win_probability,
+                  data.draw_probability,
+                  data.away_team_win_probability,
+              ],
+              backgroundColor: [
+                  "rgba(25, 135, 84, 0.7)", // Success Green
+                  "rgba(255, 193, 7, 0.7)", // Warning Yellow
+                  "rgba(220, 53, 69, 0.7)", // Danger Red
+              ],
+              borderColor: [
+                  "rgba(25, 135, 84, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+              ],
+              borderWidth: 1,
+          }, ],
       },
-    },
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                  position: "top",
+                  labels: {
+                      color: "#333"
+                  },
+              },
+              title: {
+                  display: true,
+                  text: "Match Outcome Prediction",
+                  color: "#333",
+              },
+          },
+      },
   });
 }
-
 async function displayLast10Matches(teamId, leagueId, tableType) {
   const tableBody = document.getElementById(`${tableType}-table-body`);
   const loadingState = document.getElementById(`${tableType}-loading-state`);
