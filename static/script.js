@@ -11,7 +11,7 @@ const isLocal =
   window.location.hostname === "127.0.0.1";
 const API_BASE = isLocal
   ? "http://127.0.0.1:5000"
-  : "https://kickcast-predictions.ts.r.appspot.com"; // Updated to Google App Engine URL
+  : "https://kickcast-1031094153243.us-central1.run.app"; // Cloud Run URL
 
 const USE_STATIC_DATA = !isLocal;
 
