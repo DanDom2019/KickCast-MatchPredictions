@@ -537,14 +537,14 @@ console.log("awayDefNum", awayDefNum);
                   data.away_team_win_probability,
               ],
               backgroundColor: [
-                  "rgba(25, 135, 84, 0.7)", // Success Green
-                  "rgba(255, 193, 7, 0.7)", // Warning Yellow
-                  "rgba(220, 53, 69, 0.7)", // Danger Red
+                  "rgba(5, 242, 108, 0.7)", // Premier League Green #05F26C
+                  "rgba(234, 242, 5, 0.7)", // Premier League Yellow #EAF205
+                  "rgba(242, 5, 92, 0.7)", // Premier League Pink #F2055C
               ],
               borderColor: [
-                  "rgba(25, 135, 84, 1)",
-                  "rgba(255, 193, 7, 1)",
-                  "rgba(220, 53, 69, 1)",
+                  "#05F26C",
+                  "#EAF205",
+                  "#F2055C",
               ],
               borderWidth: 1,
           }, ],
@@ -555,13 +555,13 @@ console.log("awayDefNum", awayDefNum);
               legend: {
                   position: "top",
                   labels: {
-                      color: "#333"
+                      color: "#ffffff"
                   },
               },
               title: {
                   display: true,
                   text: "Match Outcome Prediction",
-                  color: "#333",
+                  color: "#ffffff",
               },
           },
       },

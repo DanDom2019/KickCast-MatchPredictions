@@ -1,76 +1,164 @@
+/* ============================================
+   Premier League Theme - Inspired by premierleague.com
+   ============================================ */
+
 :root {
-    --primary-bg-color: #1b1f23;
-    --secondary-bg-color: #23272e;
-    --primary-text-color: #5f86b9;
-    --secondary-text-color: #b2b7c2;
-    --accent-color: #4da3ff;
-    --accent-hover: #2b8eff;
-    --accent-active: #1f6fcd;
-    --accent-focus-ring: rgba(77,163,255,.35);
-    --border-color: #343a46;
-  
-    --success-color: #4ae28a;
-    --danger-color:  #ff4d6d;
-    --warning-color: #ffcc66;
-  
-    --surface-hover: rgba(255,255,255,0.03);
-    --surface-accent: rgba(177,78,255,0.08);
-  }
-  
-  /* Base */
-  body {
+    /* Primary Colors */
+    --primary-bg-color: #1e0021;
+    --secondary-bg-color: #37003c;
+    --dark-purple: #340040;
+    
+    /* Text Colors */
+    --primary-text-color: #ffffff;
+    --secondary-text-color: #e0d0e5;
+    --button-text-color: #1e0021;
+    
+    /* Accent Colors - Premier League Palette */
+    --accent-pink: #F2055C;
+    --accent-cyan: #07F2F2;
+    --accent-green: #05F26C;
+    --accent-yellow: #EAF205;
+    
+    /* Derived Colors */
+    --accent-color: #07F2F2;
+    --accent-hover: #05F26C;
+    --accent-active: #F2055C;
+    --accent-focus-ring: rgba(7, 242, 242, 0.35);
+    --border-color: #7a2a9e;
+    
+    /* Status Colors */
+    --success-color: #05F26C;
+    --danger-color: #F2055C;
+    --warning-color: #EAF205;
+    
+    /* Surface Colors */
+    --surface-hover: rgba(85, 19, 122, 0.6);
+    --surface-accent: rgba(7, 242, 242, 0.1);
+}
+
+/* Base */
+body {
     background-color: var(--primary-bg-color);
     color: var(--primary-text-color);
-  }
-  
-  h1, h2, h3, h4, h5, h6 { color: var(--primary-text-color); }
-  .text-muted { color: var(--secondary-text-color) !important; }
-  hr { border-top: 1px solid var(--border-color); }
-  
-  /* Cards, menus */
-  .card,
-  .dropdown-menu {
+}
+
+h1, h2, h3, h4, h5, h6 { 
+    color: var(--primary-text-color); 
+}
+
+.text-muted { 
+    color: var(--secondary-text-color) !important; 
+}
+
+hr { 
+    border-top: 1px solid var(--border-color); 
+}
+
+/* Cards, menus */
+.card,
+.dropdown-menu {
     background-color: var(--secondary-bg-color);
     border: 1px solid var(--border-color);
     color: var(--primary-text-color);
-  }
-  
-  /* Dropdown items */
-  .dropdown-item {
-    color: var(--primary-text-color);
-  }
-  .dropdown-item:hover,
-  .dropdown-item:focus {
-    background-color: var(--surface-accent);
-    color: var(--primary-text-color);
-  }
+}
 
-  /* Buttons – success styled like your accent */
+.card-body {
+    color: var(--primary-text-color);
+}
+
+/* Dropdown items */
+.dropdown-item {
+    color: var(--primary-text-color);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--accent-pink);
+    color: var(--primary-text-color);
+}
+
+/* ============================================
+   Buttons - White with Dark Purple Text
+   ============================================ */
+
+.btn-primary,
+.btn-info,
 .btn-success {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: #ffffff;
-  }
-  .btn-success:hover {
-    background-color: var(--accent-hover);
-    border-color: var(--accent-hover);
-    color: #ffffff;
-  }
-  .btn-success:active,
-  .btn-success:focus,
-  .btn-success.show {
-    background-color: var(--accent-active) !important;
-    border-color: var(--accent-active) !important;
-    color: #ffffff !important;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: var(--button-text-color);
+    font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-info:hover,
+.btn-success:hover {
+    background-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: var(--button-text-color);
+}
+
+.btn-primary:active,
+.btn-info:active,
+.btn-success:active,
+.btn-primary:focus,
+.btn-info:focus,
+.btn-success:focus,
+.btn-primary.show,
+.btn-info.show,
+.btn-success.show {
+    background-color: var(--accent-green) !important;
+    border-color: var(--accent-green) !important;
+    color: var(--button-text-color) !important;
     box-shadow: 0 0 0 0.25rem var(--accent-focus-ring) !important;
-  }
-  
-/* Dark table theme */
+}
+
+/* Secondary button */
+.btn-secondary {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: var(--button-text-color);
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-yellow);
+    border-color: var(--accent-yellow);
+    color: var(--button-text-color);
+}
+
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary.show {
+    background-color: var(--accent-cyan) !important;
+    border-color: var(--accent-cyan) !important;
+    color: var(--button-text-color) !important;
+    box-shadow: 0 0 0 0.25rem var(--accent-focus-ring) !important;
+}
+
+/* Dropdown toggle buttons */
+.dropdown-toggle {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: var(--button-text-color);
+    font-weight: 600;
+}
+
+.dropdown-toggle:hover {
+    background-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: var(--button-text-color);
+}
+
+/* ============================================
+   Tables - Dark Purple Theme
+   ============================================ */
+
 .table {
     --bs-table-color: var(--primary-text-color);
-    --bs-table-bg: #151015; /* near black */
+    --bs-table-bg: var(--dark-purple);
     --bs-table-border-color: var(--border-color);
-    --bs-table-striped-bg: var(--surface-hover);
+    --bs-table-striped-bg: rgba(85, 19, 122, 0.5);
     --bs-table-striped-color: var(--primary-text-color);
     --bs-table-hover-bg: var(--surface-accent);
     --bs-table-hover-color: var(--primary-text-color);
@@ -78,136 +166,136 @@
     --bs-table-active-color: var(--primary-text-color);
     color: var(--primary-text-color);
     border-color: var(--border-color);
-  }
-  .table thead th {
-    background-color: #1b1520; /* slightly lighter than body */
-    color: var(--primary-text-color);
-    border-bottom-color: var(--border-color);
-  }
-  .table tbody tr {
-    background-color: var(--bs-table-bg);
-  }
-  .table > :not(caption) > * > * {
-    background-color: inherit; /* ensure cells use dark bg */
-    border-color: var(--border-color);
-  }
+}
 
+.table thead th {
+    background-color: var(--secondary-bg-color);
+    color: var(--primary-text-color);
+    border-bottom: 2px solid rgb(84, 30, 93);
+}
 
-  /* Buttons – unified accent styling */
-  .btn-primary,
-  .btn-info {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: #ffffff;
-  }
-  .btn-primary:hover,
-  .btn-info:hover {
-    background-color: var(--accent-hover);
-    border-color: var(--accent-hover);
-    color: #ffffff;
-  }
-  .btn-primary:active,
-  .btn-info:active,
-  .btn-primary:focus,
-  .btn-info:focus,
-  .btn-primary.show,
-  .btn-info.show {
-    background-color: var(--accent-active) !important;
-    border-color: var(--accent-active) !important;
-    color: #ffffff !important;
-    box-shadow: 0 0 0 0.25rem var(--accent-focus-ring) !important;
-  }
-  
-  /* Secondary button matches dark surfaces */
-  .btn-secondary {
-    background-color: #3a333a;
+.table tbody tr {
+    background-color: var(--dark-purple);
+}
+
+.table > :not(caption) > * > * {
+    background-color: inherit;
     border-color: var(--border-color);
     color: var(--primary-text-color);
-  }
-  .btn-secondary:hover {
-    background-color: #443b45;
-    border-color: var(--border-color);
+}
+
+/* ============================================
+   Match-up Styling
+   ============================================ */
+
+.match-details-wrapper {
+    background-color: var(--secondary-bg-color);
     color: var(--primary-text-color);
-  }
-  .btn-secondary:focus,
-  .btn-secondary:active,
-  .btn-secondary.show {
-    background-color: #3a333a !important;
-    border-color: var(--border-color) !important;
-    color: var(--primary-text-color) !important;
-    box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.08) !important;
-  }
-  .match-details-wrapper{
-    background-color: var(--accent-active);
-    color: var(--accent-active);
-  }
-  
-  /* Match-up styling */
-  .team-card {
+}
+
+.team-card {
     padding: 15px;
     border-radius: 8px;
-    background-color: var(--surface-hover);
+    background-color: var(--dark-purple);
     border: 1px solid var(--border-color);
     transition: all 0.3s ease;
-  }
-  
-  .team-card:hover {
-    background-color: var(--surface-accent);
+}
+
+.team-card:hover {
+    background-color: var(--secondary-bg-color);
     transform: translateY(-2px);
-  }
-  
-  .match-details {
+    border-color: var(--accent-cyan);
+}
+
+.match-details {
     padding: 20px;
     border-radius: 8px;
-    background-color: var(--surface-accent);
-    border: 2px solid var(--border-color);
-  }
-  
-  .match-details h4 {
-    color: var(--accent-color);
+    background-color: var(--secondary-bg-color);
+    border: 2px solid rgb(84, 30, 93);
+}
+
+.match-details h4 {
+    color: var(--accent-cyan);
     font-weight: bold;
     font-size: 2rem;
-  }
-  
-  .match-info {
+}
+
+.match-info {
     font-size: 0.9rem;
-  }
-  
-  .team-logo {
+    color: var(--secondary-text-color);
+}
+
+.team-logo {
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-  
-  /* Inputs/selects */
-  .form-control,
-  .form-select {
-    background-color: var(--secondary-bg-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   Inputs/Selects
+   ============================================ */
+
+.form-control,
+.form-select {
+    background-color: var(--dark-purple);
     border-color: var(--border-color);
     color: var(--primary-text-color);
-  }
-  .form-control:focus,
-  .form-select:focus {
-    background-color: var(--secondary-bg-color);
-    border-color: var(--accent-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--dark-purple);
+    border-color: var(--accent-cyan);
     color: var(--primary-text-color);
     box-shadow: 0 0 0 0.25rem var(--accent-focus-ring);
-  }
-  
-  /* Badges using theme colors */
-  .badge.bg-success { background-color: var(--success-color) !important; color: #07130d !important; }
-  .badge.bg-danger  { background-color: var(--danger-color)  !important; color: #25060a !important; }
-  .badge.bg-warning { background-color: var(--warning-color) !important; color: #271b00 !important; }
-  
-  /* Fixed width for result badges to ensure consistent sizing */
-  .badge.bg-success, .badge.bg-danger, .badge.bg-warning {
+}
+
+/* ============================================
+   Badges - Premier League Colors
+   ============================================ */
+
+.badge.bg-success { 
+    background-color: var(--accent-green) !important; 
+    color: var(--button-text-color) !important; 
+}
+
+.badge.bg-danger { 
+    background-color: var(--accent-pink) !important; 
+    color: #ffffff !important; 
+}
+
+.badge.bg-warning { 
+    background-color: var(--accent-yellow) !important; 
+    color: var(--button-text-color) !important; 
+}
+
+.badge.bg-info {
+    background-color: var(--accent-cyan) !important;
+    color: var(--button-text-color) !important;
+}
+
+/* Fixed width for result badges */
+.badge.bg-success, .badge.bg-danger, .badge.bg-warning {
     min-width: 60px;
     text-align: center;
     display: inline-block;
-  }
-  
-  /* Links */
-  a { color: var(--accent-color); }
-  a:hover { color: var(--accent-hover); }
+    font-weight: 600;
+}
+
+/* ============================================
+   Links
+   ============================================ */
+
+a { 
+    color: var(--accent-cyan); 
+}
+
+a:hover { 
+    color: var(--accent-green); 
+}
+
+/* ============================================
+   Layout
+   ============================================ */
 
 .main-container {
     min-height: 80vh;
@@ -217,73 +305,176 @@
     align-items: center;
     transition: transform 0.7s ease-in-out;
 }
+
 .content-moved-up {
     transform: translateY(0);
     justify-content: flex-start;
     min-height: auto;
 }
 
-.footer{
-  width: 100%;
+.footer {
+    width: 100%;
 }
 
-/* Header Styles */
+/* ============================================
+   Header Styles - White Text
+   ============================================ */
+
 .site-header {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    border-bottom: 2px solid rgb(84, 30, 93);
+    background-color: var(--dark-purple);
 }
 
 .header-logo {
-  max-height: 50px;
-  width: auto;
-  height: auto;
+    max-height: 50px;
+    width: auto;
+    height: auto;
 }
 
 .header-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary-text-color);
-  text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .github-link {
-  display: inline-flex;
-  align-items: center;
-  transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
 }
 
 .github-link:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 .github-icon {
-  width: 24px;
-  height: 24px;
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
 }
 
-/* Responsive header */
+/* ============================================
+   Result Display Styling
+   ============================================ */
+
+.text-success {
+    color: var(--accent-green) !important;
+}
+
+.text-danger {
+    color: var(--accent-pink) !important;
+}
+
+.text-warning {
+    color: var(--accent-yellow) !important;
+}
+
+.text-info {
+    color: var(--accent-cyan) !important;
+}
+
+/* Probability display */
+.display-4 {
+    font-weight: 700;
+}
+
+/* List group items */
+.list-group-item {
+    background-color: var(--dark-purple);
+    border-color: var(--border-color);
+    color: var(--primary-text-color);
+}
+
+/* Card headers */
+.card h5, .card h6 {
+    color: var(--secondary-text-color);
+}
+
+.card strong {
+    color: var(--primary-text-color);
+}
+
+/* Background light override */
+.bg-light {
+    background-color: var(--secondary-bg-color) !important;
+    color: var(--primary-text-color) !important;
+}
+
+.border-0 {
+    border: none !important;
+}
+
+/* ============================================
+   Responsive Header
+   ============================================ */
+
 @media (max-width: 768px) {
-  .site-header .d-flex {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .header-left,
-  .header-center,
-  .header-right {
-    flex: 1 1 100%;
-    text-align: center;
-  }
-  
-  .header-center {
-    order: -1;
-  }
-  
-  .header-title {
-    font-size: 1.25rem;
-  }
-  
-  .header-logo {
-    max-height: 40px;
-  }
+    .site-header .d-flex {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .header-left,
+    .header-center,
+    .header-right {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+    
+    .header-center {
+        order: -1;
+    }
+    
+    .header-title {
+        font-size: 1.25rem;
+    }
+    
+    .header-logo {
+        max-height: 40px;
+    }
+}
+
+/* ============================================
+   Additional Premier League Accents
+   ============================================ */
+
+/* Score highlights */
+.score-highlight {
+    color: var(--accent-yellow);
+    font-weight: 700;
+}
+
+/* Win probability colors */
+.home-win-probability {
+    color: var(--accent-green);
+}
+
+.away-win-probability {
+    color: var(--accent-pink);
+}
+
+.draw-probability {
+    color: var(--accent-yellow);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-bg-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-color);
 }
