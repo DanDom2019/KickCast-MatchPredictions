@@ -130,6 +130,46 @@ function selectOpponentTeam(teamId, teamName, leagueId) {
   document.getElementById("step3-simulation-result").classList.add("d-none");
 }
 
+/**
+ * Resets the application to the first stage (team selection).
+ * Clears all state and restores the initial UI.
+ */
+function resetToFirstStage() {
+  // Clear all global state variables
+  firstTeam = null;
+  firstTeamData = null;
+  opponentTeam = null;
+  opponentTeamData = null;
+  nextMatchDetails = null;
+
+  // Destroy the prediction chart if it exists
+  if (predictionChart) {
+    predictionChart.destroy();
+    predictionChart = null;
+  }
+
+  // Hide all step containers except step 1
+  document.getElementById("step2-container").classList.add("d-none");
+  document.getElementById("step3-simulation-result").classList.add("d-none");
+  document.getElementById("first-team-details-container").classList.add("d-none");
+  document.getElementById("opponent-team-info-wrapper").classList.add("d-none");
+  document.getElementById("start-simulation-btn").classList.add("d-none");
+
+  // Restore initial layout by removing the moved-up class
+  document.getElementById("main-container").classList.remove("content-moved-up");
+
+  // Reset dropdown button texts
+  document.getElementById("first-team-dropdown-btn").textContent = "Select Team";
+  document.getElementById("opponent-team-dropdown-btn").textContent = "Select Opponent";
+
+  // Clear displayed content in result containers
+  document.getElementById("first-team-info").innerHTML = "";
+  document.getElementById("opponent-team-info").innerHTML = "";
+  document.getElementById("match-result-display").innerHTML = "";
+  document.getElementById("last10-table-body").innerHTML = "";
+  document.getElementById("opponent-last10-table-body").innerHTML = "";
+}
+
 async function simulateNextOfficialMatch() {
   if (!firstTeam) {
     alert("Please select a team first.");

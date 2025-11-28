@@ -226,3 +226,64 @@
 .footer{
   width: 100%;
 }
+
+/* Header Styles */
+.site-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-logo {
+  max-height: 50px;
+  width: auto;
+  height: auto;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-text-color);
+  text-align: center;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.github-link:hover {
+  opacity: 0.8;
+}
+
+.github-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive header */
+@media (max-width: 768px) {
+  .site-header .d-flex {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .header-left,
+  .header-center,
+  .header-right {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  
+  .header-center {
+    order: -1;
+  }
+  
+  .header-title {
+    font-size: 1.25rem;
+  }
+  
+  .header-logo {
+    max-height: 40px;
+  }
+}
