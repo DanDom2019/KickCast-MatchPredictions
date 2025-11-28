@@ -414,18 +414,76 @@ function displayPredictionResult(data, elementId) {
   const homeStats = data.home_team_stats || {};
   const awayStats = data.away_team_stats || {};
   const leagueAvgs = data.league_averages || {};
-console.log("homeStats", homeStats);
-console.log("awayStats", awayStats);
-console.log("leagueAvgs", leagueAvgs);
+  
+  // ========== DEBUG LOGGING ==========
+  console.group("🔍 Simulation Data Debug");
+  console.log("Full API Response:", data);
+  console.log("Response Keys:", Object.keys(data));
+  console.log("---");
+  console.log("homeStats:", homeStats);
+  console.log("homeStats Type:", typeof homeStats);
+  console.log("homeStats Keys:", Object.keys(homeStats));
+  console.log("homeStats Empty?", Object.keys(homeStats).length === 0);
+  console.log("---");
+  console.log("awayStats:", awayStats);
+  console.log("awayStats Type:", typeof awayStats);
+  console.log("awayStats Keys:", Object.keys(awayStats));
+  console.log("awayStats Empty?", Object.keys(awayStats).length === 0);
+  console.log("---");
+  console.log("leagueAvgs:", leagueAvgs);
+  console.log("leagueAvgs Type:", typeof leagueAvgs);
+  console.log("leagueAvgs Keys:", Object.keys(leagueAvgs));
+  console.log("leagueAvgs Empty?", Object.keys(leagueAvgs).length === 0);
+  console.log("---");
+  
+  // Check if stats are empty objects and log warnings
+  if (Object.keys(homeStats).length === 0) {
+    console.warn("⚠️ WARNING: home_team_stats is empty object! This indicates a backend issue.");
+    console.warn("Expected keys: attack_strength_home, defense_strength_home, attack_strength_away, defense_strength_away");
+  }
+  if (Object.keys(awayStats).length === 0) {
+    console.warn("⚠️ WARNING: away_team_stats is empty object! This indicates a backend issue.");
+    console.warn("Expected keys: attack_strength_home, defense_strength_home, attack_strength_away, defense_strength_away");
+  }
+  if (Object.keys(leagueAvgs).length === 0) {
+    console.warn("⚠️ WARNING: league_averages is empty object! This indicates a backend issue.");
+    console.warn("Expected keys: avg_home_goals, avg_away_goals");
+  }
+  
+  // Validate specific keys exist
+  const requiredHomeKeys = ["attack_strength_home", "defense_strength_home", "attack_strength_away", "defense_strength_away"];
+  const requiredAwayKeys = ["attack_strength_home", "defense_strength_home", "attack_strength_away", "defense_strength_away"];
+  const requiredLeagueKeys = ["avg_home_goals", "avg_away_goals"];
+  
+  const missingHomeKeys = requiredHomeKeys.filter(key => !(key in homeStats));
+  const missingAwayKeys = requiredAwayKeys.filter(key => !(key in awayStats));
+  const missingLeagueKeys = requiredLeagueKeys.filter(key => !(key in leagueAvgs));
+  
+  if (missingHomeKeys.length > 0) {
+    console.error("❌ Missing keys in homeStats:", missingHomeKeys);
+  }
+  if (missingAwayKeys.length > 0) {
+    console.error("❌ Missing keys in awayStats:", missingAwayKeys);
+  }
+  if (missingLeagueKeys.length > 0) {
+    console.error("❌ Missing keys in leagueAvgs:", missingLeagueKeys);
+  }
+  
+  console.groupEnd();
+  // ========== END DEBUG LOGGING ==========
+  
   // Get numeric values first (for calculations), then format for display
   const homeAttackNum = parseFloat(homeStats.attack_strength_home) || 0;
   const homeDefNum = parseFloat(homeStats.defense_strength_home) || 0;
   const awayAttackNum = parseFloat(awayStats.attack_strength_away) || 0;
   const awayDefNum = parseFloat(awayStats.defense_strength_away) || 0;
-console.log("homeAttackNum", homeAttackNum);
-console.log("homeDefNum", homeDefNum);
-console.log("awayAttackNum", awayAttackNum);
-console.log("awayDefNum", awayDefNum);
+  
+  console.log("Parsed Values:", {
+    homeAttackNum,
+    homeDefNum,
+    awayAttackNum,
+    awayDefNum
+  });
   // Format for display (2 decimal places)
   const homeAttack = homeAttackNum.toFixed(2);
   const homeDef = homeDefNum.toFixed(2);

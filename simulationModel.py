@@ -67,8 +67,52 @@ def predict_match(home_team_id, away_team_id, league_id):
     away_team_matches = filter_matches_by_team_id(away_team_id, all_matches_current_season)
     
     # 4. Calculate dynamic stats for both teams using the filtered data
-    home_team_stats = calculate_final_team_stats(current_season, league_id, home_team_id, league_averages, team_matches=home_team_matches)
-    away_team_stats = calculate_final_team_stats(current_season, league_id, away_team_id, league_averages, team_matches=away_team_matches)
+    try:
+        home_team_stats = calculate_final_team_stats(current_season, league_id, home_team_id, league_averages, team_matches=home_team_matches)
+        # Validate that stats dict has all required keys
+        required_keys = ["attack_strength_home", "defense_strength_home", "attack_strength_away", "defense_strength_away"]
+        if not home_team_stats or not isinstance(home_team_stats, dict) or not all(key in home_team_stats for key in required_keys):
+            print(f"Warning: home_team_stats is invalid or incomplete: {home_team_stats}")
+            home_team_stats = {
+                "attack_strength_home": 0,
+                "defense_strength_home": 0,
+                "attack_strength_away": 0,
+                "defense_strength_away": 0
+            }
+    except Exception as e:
+        print(f"Error calculating home team stats: {e}")
+        import traceback
+        traceback.print_exc()
+        home_team_stats = {
+            "attack_strength_home": 0,
+            "defense_strength_home": 0,
+            "attack_strength_away": 0,
+            "defense_strength_away": 0
+        }
+    
+    try:
+        away_team_stats = calculate_final_team_stats(current_season, league_id, away_team_id, league_averages, team_matches=away_team_matches)
+        # Validate that stats dict has all required keys
+        required_keys = ["attack_strength_home", "defense_strength_home", "attack_strength_away", "defense_strength_away"]
+        if not away_team_stats or not isinstance(away_team_stats, dict) or not all(key in away_team_stats for key in required_keys):
+            print(f"Warning: away_team_stats is invalid or incomplete: {away_team_stats}")
+            away_team_stats = {
+                "attack_strength_home": 0,
+                "defense_strength_home": 0,
+                "attack_strength_away": 0,
+                "defense_strength_away": 0
+            }
+    except Exception as e:
+        print(f"Error calculating away team stats: {e}")
+        import traceback
+        traceback.print_exc()
+        away_team_stats = {
+            "attack_strength_home": 0,
+            "defense_strength_home": 0,
+            "attack_strength_away": 0,
+            "defense_strength_away": 0
+        }
+    
     print("successfully calculated team stats")
     # 3. Calculate expected goals (lambda) using dynamic strengths
     lambda_home = (home_team_stats['attack_strength_home'] * away_team_stats['defense_strength_away'] * league_averages['avg_home_goals'])
