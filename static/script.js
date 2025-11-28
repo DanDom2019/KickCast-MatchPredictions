@@ -300,7 +300,7 @@ function displayMatchUp() {
                               nextMatchDetails.utcDate
                             ).toLocaleString()}</p>
                             <p class="mb-1"><strong>Venue:</strong></p>
-                            <p class="mb-0">${nextMatchDetails.venue}</p>
+                            <p class="mb-0">${nextMatchDetails.venue || homeTeamData.venue || "N/A"}</p>
                         </div>
                     `
                         : `
