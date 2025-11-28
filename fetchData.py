@@ -98,9 +98,10 @@ def calculate_league_averages(matches):
     """
     total_home_goals = 0
     total_away_goals = 0
-    total_matches = len(matches)
+    # valid_matches_count replaces len(matches) to ensure we only count games with scores
+    valid_matches_count = 0 
 
-    if total_matches == 0:
+    if not matches:
         return {"avg_home_goals": 0, "avg_away_goals": 0}
 
     for match in matches:
@@ -109,19 +110,22 @@ def calculate_league_averages(matches):
             home_goals = match['score']['fullTime'].get('home')
             away_goals = match['score']['fullTime'].get('away')
             
-            if home_goals is not None:
+            # Only count this match if scores are actually present (not None)
+            if home_goals is not None and away_goals is not None:
                 total_home_goals += home_goals
-            if away_goals is not None:
                 total_away_goals += away_goals
+                valid_matches_count += 1
 
-    avg_home_goals = total_home_goals / total_matches
-    avg_away_goals = total_away_goals / total_matches
+    if valid_matches_count == 0:
+        return {"avg_home_goals": 0, "avg_away_goals": 0}
+
+    avg_home_goals = total_home_goals / valid_matches_count
+    avg_away_goals = total_away_goals / valid_matches_count
 
     return {
         "avg_home_goals": round(avg_home_goals, 3),
         "avg_away_goals": round(avg_away_goals, 3)
     }
-
 #fetch the matches based on the team id and season and numbers of matches as requested
 def retrieve_matches_for_team(leagueId,season, team_id, numsMatches=None,noMatch=False):
     start_season=season

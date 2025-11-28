@@ -348,6 +348,7 @@ function runSimulation() {
 }
 function displayPredictionResult(data, elementId) {
   const container = document.getElementById(elementId);
+  console.log("data", data);
   if (!data || data.error) {
       container.innerHTML = `<p class="text-danger">Failed to get a valid simulation result: ${
       data.error || "Unknown error"
@@ -373,13 +374,18 @@ function displayPredictionResult(data, elementId) {
   const homeStats = data.home_team_stats || {};
   const awayStats = data.away_team_stats || {};
   const leagueAvgs = data.league_averages || {};
-
+console.log("homeStats", homeStats);
+console.log("awayStats", awayStats);
+console.log("leagueAvgs", leagueAvgs);
   // Get numeric values first (for calculations), then format for display
   const homeAttackNum = parseFloat(homeStats.attack_strength_home) || 0;
   const homeDefNum = parseFloat(homeStats.defense_strength_home) || 0;
   const awayAttackNum = parseFloat(awayStats.attack_strength_away) || 0;
   const awayDefNum = parseFloat(awayStats.defense_strength_away) || 0;
-
+console.log("homeAttackNum", homeAttackNum);
+console.log("homeDefNum", homeDefNum);
+console.log("awayAttackNum", awayAttackNum);
+console.log("awayDefNum", awayDefNum);
   // Format for display (2 decimal places)
   const homeAttack = homeAttackNum.toFixed(2);
   const homeDef = homeDefNum.toFixed(2);
@@ -428,10 +434,6 @@ function displayPredictionResult(data, elementId) {
                           <small class="text-muted">vs League Avg (1.0)</small>
                           <div><strong>${awayAttack}</strong></div>
                       </div>
-                      <div class="progress mt-2" style="height: 6px;">
-                          <div class="progress-bar bg-success" role="progressbar" style="width: ${Math.min(homeAttackNum * 50, 100)}%"></div>
-                          <div class="progress-bar bg-danger" role="progressbar" style="width: ${Math.min(awayAttackNum * 50, 100)}%"></div>
-                      </div>
                   </div>
 
                   <div class="col-md-4 border-start border-end">
@@ -446,10 +448,6 @@ function displayPredictionResult(data, elementId) {
                           <div><strong>${homeDef}</strong></div>
                           <small class="text-muted">(Lower is better)</small>
                           <div><strong>${awayDef}</strong></div>
-                      </div>
-                       <div class="progress mt-2" style="height: 6px;">
-                          <div class="progress-bar bg-primary" role="progressbar" style="width: ${Math.min(homeDefNum * 50, 100)}%"></div>
-                          <div class="progress-bar bg-warning" role="progressbar" style="width: ${Math.min(awayDefNum * 50, 100)}%"></div>
                       </div>
                   </div>
               </div>

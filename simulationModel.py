@@ -1,8 +1,29 @@
 from scipy.stats import poisson
 import json
 import os
+from datetime import datetime
 from prosessData import calculate_final_team_stats 
 from fetchData import retrieve_matches_for_team, calculate_league_averages, filter_matches_by_team_id
+
+def get_current_season():
+    """
+    Determines the current football season based on the current date.
+    Season starts on August 1st of each year.
+    
+    Examples:
+    - If today is July 15, 2025 -> returns 2024 (previous season)
+    - If today is August 15, 2025 -> returns 2025 (current season)
+    - If today is March 10, 2025 -> returns 2024 (current season)
+    """
+    now = datetime.now()
+    current_year = now.year
+    current_month = now.month
+    
+    # If we're before August, we're still in the previous season
+    if current_month < 8:
+        return current_year - 1
+    else:
+        return current_year
 
 def predict_match(home_team_id, away_team_id, league_id):
     """
@@ -15,16 +36,31 @@ def predict_match(home_team_id, away_team_id, league_id):
     :return: A dictionary containing the prediction probabilities and details.
     """
     print("running")
-    current_season = 2025 # This can be updated as new seasons begin
+    current_season = get_current_season()  # Dynamically determine current season
 
     # 1. Fetch ALL league matches ONCE (this is the only API call needed!)
     all_matches_current_season = retrieve_matches_for_team(league_id, current_season, team_id=None) or []
-    if not all_matches_current_season:
-        return {"error": f"No match data found for the league in season {current_season} to calculate averages."}
     
     # 2. Calculate league averages from the fetched data
     league_averages = calculate_league_averages(all_matches_current_season)
-    print("got league averages")
+    
+    # If current season has no valid matches (all zeros), fall back to previous season
+    if league_averages['avg_home_goals'] == 0 and league_averages['avg_away_goals'] == 0:
+        print(f"No valid matches found for season {current_season}, falling back to previous season")
+        previous_season = current_season - 1
+        all_matches_previous_season = retrieve_matches_for_team(league_id, previous_season, team_id=None) or []
+        if all_matches_previous_season:
+            league_averages = calculate_league_averages(all_matches_previous_season)
+            # Also update the matches to use previous season for team stats
+            all_matches_current_season = all_matches_previous_season
+            current_season = previous_season
+        else:
+            return {"error": f"No match data found for the league in season {current_season} or {previous_season} to calculate averages."}
+    
+    if not all_matches_current_season:
+        return {"error": f"No match data found for the league in season {current_season} to calculate averages."}
+    
+    print(f"got league averages: {league_averages}")
     
     # 3. Filter matches for each team from the already-fetched data (no additional API calls!)
     home_team_matches = filter_matches_by_team_id(home_team_id, all_matches_current_season)
