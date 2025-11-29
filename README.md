@@ -1,6 +1,6 @@
 
 
-# ⚽ KickCast - Premier League Predictor
+# KickCast - Premier League Predictor
 
 **KickCast** is a full-stack web application that predicts soccer match outcomes using statistical modeling. By leveraging historical match data and the **Poisson Distribution**, it calculates the probabilities of wins, draws, and losses, alongside the most likely specific scorelines.
 
@@ -8,7 +8,7 @@ The application features a Python Flask backend for data processing and simulati
 
 -----
 
-## 🧠 How It Works: The Analysis Logic
+## How It Works: The Analysis Logic
 
 KickCast does not rely on random guessing. It uses a mathematical approach to determine the "Attack Strength" and "Defense Strength" of every team to calculate **Expected Goals (xG)**.
 
@@ -57,7 +57,7 @@ Once the inputs are ready, the simulation (in `simulationModel.py`) runs as foll
 
 -----
 
-## 🚀 Features
+## Features
 
   * **Real-Time Data:** Fetches the latest match results and fixtures via `football-data.org` API.
   * **Visualizations:** Interactive Doughnut charts (Chart.js) displaying win probabilities.
@@ -67,7 +67,7 @@ Once the inputs are ready, the simulation (in `simulationModel.py`) runs as foll
 
 -----
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
   * **Backend:** Python 3.9+, Flask, SciPy (for Poisson `pmf`), Pandas.
   * **Frontend:** HTML5, CSS3, Bootstrap 5, JavaScript (Fetch API), Chart.js.
@@ -76,7 +76,7 @@ Once the inputs are ready, the simulation (in `simulationModel.py`) runs as foll
 
 -----
 
-## 📦 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 
@@ -118,7 +118,7 @@ Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view t
 
 -----
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 ├── app.py                 # Main Flask application entry point
@@ -136,7 +136,7 @@ Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view t
 
 -----
 
-## 🔮 Future Improvements
+##  Future Improvements
 
   * **Player-Level Analysis:** incorporating key player injuries into the weighting system.
   * **Live Odds Comparison:** Fetching betting odds to compare model value vs. bookmaker value.
@@ -144,6 +144,6 @@ Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view t
 
 -----
 
-## 📄 License
+##  License
 
 This project is open-source. Please ensure you comply with the data usage policies of the `football-data.org` API.
