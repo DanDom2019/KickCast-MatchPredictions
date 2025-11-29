@@ -30,7 +30,6 @@ def fetch_all_teams_matches_in_season(leagueId, season=None):
         "status": "FINISHED",
         "season": season
     }
-    #since it only can fetch 100 set per time. so we start with match day 1-10 first
     
     data = fetch(f"/competitions/{leagueId}/matches", params=params)
     return data
