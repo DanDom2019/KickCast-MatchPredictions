@@ -1,76 +1,149 @@
-# KickCast - Soccer Match Prediction
 
-KickCast is a web-based application that predicts the outcomes of soccer matches using a Poisson distribution model. It provides probabilities for a home win, away win, or draw, along with the top five most likely scores. The application can be deployed locally and currently supports major European leagues, with plans for expansion.
 
-## Features 
+# ⚽ KickCast - Premier League Predictor
 
-  * **Match Prediction:** Get predictions for upcoming matches, including win/loss/draw probabilities and the most likely scores.
-  * **Team Statistics:** View detailed information for each team, including their last 10 matches.
-  * **Dynamic Model:** The prediction model dynamically adjusts to team performance as the season progresses, using the previous season's data for early-season accuracy.
-  * **Web Interface:** An intuitive web interface for selecting teams and viewing predictions.
-  * **REST API:** A Flask-based REST API for fetching data and running simulations.
+**KickCast** is a full-stack web application that predicts soccer match outcomes using statistical modeling. By leveraging historical match data and the **Poisson Distribution**, it calculates the probabilities of wins, draws, and losses, alongside the most likely specific scorelines.
 
-## How It Works 
+The application features a Python Flask backend for data processing and simulation, served to a responsive Bootstrap frontend with Chart.js visualizations.
 
-The prediction model is based on the **Poisson distribution**, a statistical model that is well-suited for modeling the number of goals scored in a soccer match. The model calculates the expected number of goals for each team (lambda) based on their historical performance.
+-----
 
-Here's a breakdown of the process:
+## 🧠 How It Works: The Analysis Logic
 
-1.  **Data Collection:** Match data, including scores, teams, and leagues, is fetched from the [football-data.org](https://www.football-data.org/) API.
-2.  **Statistical Modeling:** The application calculates team-specific and league-wide statistics. For the early part of a new season, the model uses a weighted average of the previous season's and the current season's data. As more matches are played in the current season, the weight shifts towards the current season's data.
-3.  **Poisson Distribution:** The Poisson distribution is used to calculate the probability of each team scoring a certain number of goals.
-4.  **Outcome Probabilities:** By combining the probabilities of each possible scoreline, the model determines the overall probability of a home win, away win, or draw.
+KickCast does not rely on random guessing. It uses a mathematical approach to determine the "Attack Strength" and "Defense Strength" of every team to calculate **Expected Goals (xG)**.
 
-## Supported Leagues ⚽
+### 1\. The Mathematical Model: Poisson Distribution
 
-The application currently supports the following leagues:
+Soccer scores are "rare events" that occur independently within a fixed timeframe. This makes the **Poisson Distribution** the ideal statistical model for predicting scores.
 
-  * Premier League (England)
-  * Ligue 1 (France)
-  * Bundesliga (Germany)
-  * Serie A (Italy)
-  * Primera Division (La Liga) (Spain)
+The probability of a team scoring $k$ goals is calculated as:
 
-## Getting Started 🚀
+$$P(k) = \frac{e^{-\lambda} \lambda^k}{k!}$$
 
-To run the application locally, you'll need Python and the dependencies listed in `requirements.txt`.
+Where $\lambda$ (Lambda) represents the **Expected Goals** for that specific match.
+
+### 2\. Calculating Team Strengths (The Inputs)
+
+To find $\lambda$, the system first calculates relative strengths compared to the league average:
+
+  * **Attack Strength:** (Average goals scored by Team A) ÷ (Average goals scored by an average league team).
+  * **Defense Strength:** (Average goals conceded by Team A) ÷ (Average goals conceded by an average league team).
+
+These calculations are split into **Home** and **Away** contexts, as home-field advantage is statistically significant.
+
+### 3\. The "Dynamic Season" Algorithm
+
+One common issue with statistical models is early-season volatility (e.g., a team wins their first game 5-0 and looks invincible).
+
+KickCast solves this using a **Weighted Transition Period** (found in `prosessData.py`):
+
+  * **Early Season (\< 8 matches):** The model calculates a weighted average of **Last Season's Stats** and **Current Season's Stats**. As the season progresses, the weight shifts linearly toward the current form.
+  * **Mid-to-Late Season (8+ matches):** The model relies entirely on the current season's data.
+
+### 4\. The Simulation Loop
+
+Once the inputs are ready, the simulation (in `simulationModel.py`) runs as follows:
+
+1.  **Calculate Expected Goals (xG):**
+    ```python
+    Home_xG = Home_Attack * Away_Defense * Avg_League_Home_Goals
+    Away_xG = Away_Attack * Home_Defense * Avg_League_Away_Goals
+    ```
+2.  **Probability Matrix:** The system iterates through a matrix of scorelines (0-0 up to 7-7).
+3.  **Outcome Summation:**
+      * **Home Win %:** Sum of probabilities where Home Goals \> Away Goals.
+      * **Draw %:** Sum of probabilities where Home Goals == Away Goals.
+      * **Away Win %:** Sum of probabilities where Away Goals \> Home Goals.
+
+-----
+
+## 🚀 Features
+
+  * **Real-Time Data:** Fetches the latest match results and fixtures via `football-data.org` API.
+  * **Visualizations:** Interactive Doughnut charts (Chart.js) displaying win probabilities.
+  * **Detailed Stats:** View specific Attack and Defense ratings compared to the league average.
+  * **Match History:** Displays the last 10 matches for selected teams to analyze form.
+  * **Multi-League Support:** Designed to scale for Premier League, La Liga, Bundesliga, Serie A, and Ligue 1.
+
+-----
+
+## 🛠️ Tech Stack
+
+  * **Backend:** Python 3.9+, Flask, SciPy (for Poisson `pmf`), Pandas.
+  * **Frontend:** HTML5, CSS3, Bootstrap 5, JavaScript (Fetch API), Chart.js.
+  * **Deployment:** Docker, Google Cloud Run (configured via `app.yaml`).
+  * **Data Source:** [football-data.org](https://www.football-data.org/).
+
+-----
+
+## 📦 Installation & Setup
 
 ### Prerequisites
 
   * Python 3.x
   * pip
 
-### Installation
+### 1\. Clone the Repository
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/dandom2019/footballmatchessimulation.git
-    cd footballmatchessimulation
-    ```
-2.  **Install the dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+git clone https://github.com/yourusername/kickcast.git
+cd kickcast
+```
 
-### Running the Application
+### 2\. Install Dependencies
 
-1.  **Run the Flask application:**
-    ```bash
-    python app.py
-    ```
-2.  **Open your browser** and navigate to `http://127.0.0.1:5000`.
+```bash
+pip install -r requirements.txt
+```
 
-## Technologies Used 
+### 3\. Set Environment Variables
 
-  * **Backend:** Python, Flask, Flask-Cors
-  * **Frontend:** HTML, CSS, JavaScript, Bootstrap
-  * **Data Processing:** pandas, scipy
-  * **Data Fetching:** requests, beautifulsoup4, lxml
+You need an API token from [football-data.org](https://www.football-data.org/).
 
-## Future Work 
+```bash
+# On Mac/Linux
+export FOOTBALL_API_TOKEN="your_api_token_here"
 
-  * Expand support to other major leagues around the world.
-  * Incorporate more advanced prediction models.
-  * Add more detailed team and player statistics.
-  * Deploy the application to a cloud platform to make it publicly accessible to users worldwide.
+# On Windows (Powershell)
+$env:FOOTBALL_API_TOKEN="your_api_token_here"
+```
 
+### 4\. Run the Application
+
+```bash
+python app.py
+```
+
+Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view the app.
+
+-----
+
+## 📂 Project Structure
+
+```text
+├── app.py                 # Main Flask application entry point
+├── simulationModel.py     # Core Poisson prediction logic
+├── prosessData.py         # Statistical processing & weighting logic
+├── fetchData.py           # API wrappers for football-data.org
+├── static/
+│   ├── foundationData/    # Cached JSON data for leagues/teams
+│   ├── styles.css         # Custom styling
+│   └── script.js          # Frontend logic (DOM manipulation)
+├── templates/
+│   └── index.html         # Main UI
+└── requirements.txt       # Python dependencies
+```
+
+-----
+
+## 🔮 Future Improvements
+
+  * **Player-Level Analysis:** incorporating key player injuries into the weighting system.
+  * **Live Odds Comparison:** Fetching betting odds to compare model value vs. bookmaker value.
+  * **Head-to-Head History:** Adding a weight factor for historical matchups between specific teams.
+
+-----
+
+## 📄 License
+
+This project is open-source. Please ensure you comply with the data usage policies of the `football-data.org` API.
