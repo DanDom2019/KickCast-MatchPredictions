@@ -1,12 +1,10 @@
-
-
 # KickCast - Premier League Predictor
 
-**KickCast** is a full-stack web application that predicts soccer match outcomes using statistical modeling. By leveraging historical match data and the **Poisson Distribution**, it calculates the probabilities of wins, draws, and losses, alongside the most likely specific scorelines.
+**KickCast** (https://kickcast.live) is a full-stack web application that predicts soccer match outcomes using statistical modeling. By leveraging historical match data and the **Poisson Distribution**, it calculates the probabilities of wins, draws, and losses, alongside the most likely specific scorelines.
 
 The application features a Python Flask backend for data processing and simulation, served to a responsive Bootstrap frontend with Chart.js visualizations.
 
------
+---
 
 ## How It Works: The Analysis Logic
 
@@ -26,8 +24,8 @@ Where $\lambda$ (Lambda) represents the **Expected Goals** for that specific mat
 
 To find $\lambda$, the system first calculates relative strengths compared to the league average:
 
-  * **Attack Strength:** (Average goals scored by Team A) ÷ (Average goals scored by an average league team).
-  * **Defense Strength:** (Average goals conceded by Team A) ÷ (Average goals conceded by an average league team).
+- **Attack Strength:** (Average goals scored by Team A) ÷ (Average goals scored by an average league team).
+- **Defense Strength:** (Average goals conceded by Team A) ÷ (Average goals conceded by an average league team).
 
 These calculations are split into **Home** and **Away** contexts, as home-field advantage is statistically significant.
 
@@ -37,8 +35,8 @@ One common issue with statistical models is early-season volatility (e.g., a tea
 
 KickCast solves this using a **Weighted Transition Period** (found in `prosessData.py`):
 
-  * **Early Season (\< 8 matches):** The model calculates a weighted average of **Last Season's Stats** and **Current Season's Stats**. As the season progresses, the weight shifts linearly toward the current form.
-  * **Mid-to-Late Season (8+ matches):** The model relies entirely on the current season's data.
+- **Early Season (\< 8 matches):** The model calculates a weighted average of **Last Season's Stats** and **Current Season's Stats**. As the season progresses, the weight shifts linearly toward the current form.
+- **Mid-to-Late Season (8+ matches):** The model relies entirely on the current season's data.
 
 ### 4\. The Simulation Loop
 
@@ -51,37 +49,37 @@ Once the inputs are ready, the simulation (in `simulationModel.py`) runs as foll
     ```
 2.  **Probability Matrix:** The system iterates through a matrix of scorelines (0-0 up to 7-7).
 3.  **Outcome Summation:**
-      * **Home Win %:** Sum of probabilities where Home Goals \> Away Goals.
-      * **Draw %:** Sum of probabilities where Home Goals == Away Goals.
-      * **Away Win %:** Sum of probabilities where Away Goals \> Home Goals.
+    - **Home Win %:** Sum of probabilities where Home Goals \> Away Goals.
+    - **Draw %:** Sum of probabilities where Home Goals == Away Goals.
+    - **Away Win %:** Sum of probabilities where Away Goals \> Home Goals.
 
------
+---
 
 ## Features
 
-  * **Real-Time Data:** Fetches the latest match results and fixtures via `football-data.org` API.
-  * **Visualizations:** Interactive Doughnut charts (Chart.js) displaying win probabilities.
-  * **Detailed Stats:** View specific Attack and Defense ratings compared to the league average.
-  * **Match History:** Displays the last 10 matches for selected teams to analyze form.
-  * **Multi-League Support:** Designed to scale for Premier League, La Liga, Bundesliga, Serie A, and Ligue 1.
+- **Real-Time Data:** Fetches the latest match results and fixtures via `football-data.org` API.
+- **Visualizations:** Interactive Doughnut charts (Chart.js) displaying win probabilities.
+- **Detailed Stats:** View specific Attack and Defense ratings compared to the league average.
+- **Match History:** Displays the last 10 matches for selected teams to analyze form.
+- **Multi-League Support:** Designed to scale for Premier League, La Liga, Bundesliga, Serie A, and Ligue 1.
 
------
+---
 
-##  Tech Stack
+## Tech Stack
 
-  * **Backend:** Python 3.9+, Flask, SciPy (for Poisson `pmf`), Pandas.
-  * **Frontend:** HTML5, CSS3, Bootstrap 5, JavaScript (Fetch API), Chart.js.
-  * **Deployment:** Docker, Google Cloud Run (configured via `app.yaml`).
-  * **Data Source:** [football-data.org](https://www.football-data.org/).
+- **Backend:** Python 3.9+, Flask, SciPy (for Poisson `pmf`), Pandas.
+- **Frontend:** HTML5, CSS3, Bootstrap 5, JavaScript (Fetch API), Chart.js.
+- **Deployment:** Docker, Google Cloud Run (configured via `app.yaml`).
+- **Data Source:** [football-data.org](https://www.football-data.org/).
 
------
+---
 
 ## Installation & Setup
 
 ### Prerequisites
 
-  * Python 3.x
-  * pip
+- Python 3.x
+- pip
 
 ### 1\. Clone the Repository
 
@@ -116,7 +114,7 @@ python app.py
 
 Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view the app.
 
------
+---
 
 ## Project Structure
 
@@ -134,16 +132,16 @@ Visit `http://127.0.0.1:5000` (or the port specified in your terminal) to view t
 └── requirements.txt       # Python dependencies
 ```
 
------
+---
 
-##  Future Improvements
+## Future Improvements
 
-  * **Player-Level Analysis:** incorporating key player injuries into the weighting system.
-  * **Live Odds Comparison:** Fetching betting odds to compare model value vs. bookmaker value.
-  * **Head-to-Head History:** Adding a weight factor for historical matchups between specific teams.
+- **Player-Level Analysis:** incorporating key player injuries into the weighting system.
+- **Live Odds Comparison:** Fetching betting odds to compare model value vs. bookmaker value.
+- **Head-to-Head History:** Adding a weight factor for historical matchups between specific teams.
 
------
+---
 
-##  License
+## License
 
 This project is open-source. Please ensure you comply with the data usage policies of the `football-data.org` API.
